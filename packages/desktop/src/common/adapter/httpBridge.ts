@@ -185,22 +185,40 @@ function isAuthEndpoint(path: string): boolean {
 }
 
 /**
+ * Name of the Core CSRF double-submit cookie. The backend sets it (readable,
+ * not HttpOnly) alongside the session cookies; every state-changing request
+ * must echo its value back in the `x-csrf-token` header.
+ */
+export const CSRF_COOKIE_NAME = 'aionui-csrf-token';
+
+/**
  * Resolve the Core CSRF double-submit token for the current context.
  *
- * The open-source WebUI removed its CSRF layer with the legacy webserver (M6);
- * a double-submit scheme is slated to return in M7. Until then this is a stub
- * that reports "no token available", so the shared session-refresh primitive
- * (`sessionRefresh.ts`) attaches no `x-csrf-token` header and the backend —
- * which enforces no CSRF check here — accepts the request unchanged.
+ * Reads the `aionui-csrf-token` cookie set by the backend. The token only
+ * exists in WebUI browser mode (cookie-based sessions) — the desktop renderer
+ * talks to a local-mode backend that sets no cookies, so this naturally returns
+ * '' there and no header is attached. Main process has no `document` at all.
  *
- * It exists as the single seam every state-changing request would call for its
- * token, so restoring CSRF in M7 (and the aionpro superset, whose backend does
- * enforce the double-submit check) only swaps this body — no caller changes.
+ * This is the single seam every state-changing request uses for its token;
+ * `sessionRefresh.ts` shares it for the refresh call.
  *
- * Returns '' — always, for now.
+ * Returns '' when no token is available (caller skips the header).
  */
 export function resolveCoreCsrfToken(): string {
-  return '';
+  if (typeof document === 'undefined') {
+    return '';
+  }
+  const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${CSRF_COOKIE_NAME}=([^;]*)`));
+  if (!match) {
+    return '';
+  }
+  try {
+    return decodeURIComponent(match[1]);
+  } catch {
+    // Malformed escape sequence — use the raw value; the backend double-submit
+    // check compares against the raw cookie anyway.
+    return match[1];
+  }
 }
 
 function sendHttpRequest(
@@ -229,6 +247,16 @@ export async function httpRequest<T>(
     headers['Content-Type'] = 'application/json';
   }
 
+  // CSRF double-submit: echo the backend's csrf cookie on every state-changing
+  // request. No cookie (desktop local mode) → no header; the backend's check is
+  // cookie-and-header presence only, so this is a no-op outside WebUI mode.
+  if (method.toUpperCase() !== 'GET') {
+    const csrfToken = resolveCoreCsrfToken();
+    if (csrfToken) {
+      headers['x-csrf-token'] = csrfToken;
+    }
+  }
+
   if (options?.headers) {
     Object.assign(headers, options.headers);
   }
@@ -244,11 +272,21 @@ export async function httpRequest<T>(
   // the original request — the WebUI half of the #4124 fix. refreshSession() is a
   // no-op outside browser mode and single-flights concurrent 401s into one POST.
   // The auth endpoints themselves are skipped to avoid recursion.
+  // `headers` already carries the CSRF token (attached above); a refresh mints a
+  // NEW csrf cookie value, so re-resolve before replaying a non-GET.
   if (response.status === 401 && !isAuthEndpoint(path)) {
     console.debug(`[httpBridge] ${method} ${path} → 401, attempting session refresh`);
     const refreshed = await refreshSession();
     if (refreshed) {
       console.debug(`[httpBridge] session refreshed, replaying ${method} ${path}`);
+      // The refresh minted a NEW csrf cookie — re-echo it on the replay so the
+      // double-submit check sees the current value, not the stale one.
+      if (method.toUpperCase() !== 'GET') {
+        const replayCsrf = resolveCoreCsrfToken();
+        if (replayCsrf) {
+          headers['x-csrf-token'] = replayCsrf;
+        }
+      }
       response = await sendHttpRequest(method, path, headers, body);
     }
   }

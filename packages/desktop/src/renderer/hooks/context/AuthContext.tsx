@@ -1,18 +1,17 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { PREVIEW_SCOPE_KEY_PREFIX } from '@/renderer/pages/conversation/Preview/context/previewScope';
+import { isBackendHttpError, resolveCoreCsrfToken } from '@/common/adapter/httpBridge';
+import { ipcBridge } from '@/common';
 import { refreshSession } from '@/common/adapter/sessionRefresh';
-// M6: CSRF removed with legacy webserver — stub functions for compatibility, re-implement in M7
-const withCsrfToken = <T extends Record<string, unknown>>(data: T): T => data;
-const hasValidCsrfToken = (): boolean => true;
-const clearCookie = (_name: string, _path?: string): void => {};
-const CSRF_COOKIE_NAME = 'csrf-token';
+import type { AuthRole, IAuthUser } from '@/common/types/auth';
+
+/** Authenticated user identity — shared with the admin console types. */
+export type AuthUser = IAuthUser;
+export type { AuthRole };
+
+const CSRF_COOKIE_NAME = 'aionui-csrf-token';
 
 type AuthStatus = 'checking' | 'authenticated' | 'unauthenticated';
-
-export interface AuthUser {
-  id: string;
-  username: string;
-}
 
 interface LoginParams {
   username: string;
@@ -35,13 +34,36 @@ interface LoginResult {
   shouldClearCache?: boolean;
 }
 
+interface RegisterParams {
+  code: string;
+  username: string;
+  password: string;
+}
+
+type RegisterErrorCode =
+  | 'invalidCode'
+  | 'expiredCode'
+  | 'usernameTaken'
+  | 'weakPassword'
+  | 'rateLimited'
+  | 'serverError'
+  | 'networkError'
+  | 'unknown';
+
+interface RegisterResult {
+  success: boolean;
+  message?: string;
+  code?: RegisterErrorCode;
+}
+
 interface AuthContextValue {
   ready: boolean;
   user: AuthUser | null;
   status: AuthStatus;
   login: (params: LoginParams) => Promise<LoginResult>;
+  register: (params: RegisterParams) => Promise<RegisterResult>;
   logout: () => Promise<void>;
-  refresh: () => Promise<void>;
+  refresh: () => Promise<AuthUser | null>;
   clearAuthCache: () => void;
 }
 
@@ -57,7 +79,8 @@ function clearAuthCache(): void {
   if (typeof window === 'undefined') return;
 
   try {
-    // Clear CSRF cookie
+    // Clear CSRF cookie (readable double-submit cookie — safe to drop client-side;
+    // the backend mints a fresh one on the next login)
     clearCookie(CSRF_COOKIE_NAME);
     clearCookie(CSRF_COOKIE_NAME, '/');
 
@@ -82,6 +105,19 @@ function clearAuthCache(): void {
   } catch (error) {
     console.error('Failed to clear auth cache:', error);
   }
+}
+
+/** Expire a readable cookie client-side (backend re-mints on next login). */
+function clearCookie(name: string, path?: string): void {
+  if (typeof document === 'undefined') return;
+  const suffix = path ? `; path=${path}` : '';
+  document.cookie = `${name}=; Max-Age=0${suffix}`;
+}
+
+/** Shared CSRF echo-header for the raw fetches below (login/logout). */
+function csrfHeaders(): Record<string, string> {
+  const token = resolveCoreCsrfToken();
+  return token ? { 'x-csrf-token': token } : {};
 }
 
 async function fetchCurrentUser(signal?: AbortSignal): Promise<AuthUser | null> {
@@ -134,12 +170,16 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const [ready, setReady] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
-  const refresh = useCallback(async () => {
+  /**
+   * Re-check the session against /api/auth/user. Returns the authenticated user
+   * (null otherwise) so callers like `register` can bootstrap off its result.
+   */
+  const refresh = useCallback(async (): Promise<AuthUser | null> => {
     if (isDesktopRuntime) {
       setStatus('authenticated');
       setUser(null);
       setReady(true);
-      return;
+      return null;
     }
 
     abortRef.current?.abort();
@@ -156,6 +196,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
       setStatus('unauthenticated');
     }
     setReady(true);
+    return currentUser;
   }, []);
 
   useEffect(() => {
@@ -172,24 +213,16 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
         return { success: true };
       }
 
-      // Check CSRF token availability before login
-      // If token is missing, clear cache and inform user
-      const csrfTokenValid = hasValidCsrfToken();
-      if (!csrfTokenValid) {
-        console.warn('CSRF token missing or invalid, clearing cache');
-        clearAuthCache();
-        // Allow login to proceed anyway - server will set new token
-      }
-
-      // P1 安全修复：登录请求需要 CSRF Token / P1 Security fix: Login needs CSRF token
       // Backend route is /login; web-host's static-server explicitly proxies it.
+      // CSRF double-submit: echo the backend's csrf cookie in the header.
       const response = await fetch('/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...csrfHeaders(),
         },
         credentials: 'include',
-        body: JSON.stringify(withCsrfToken({ username, password, remember })),
+        body: JSON.stringify({ username, password, remember }),
       });
 
       const data = (await response.json()) as {
@@ -214,11 +247,6 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
           code = 'tooManyAttempts';
         } else if (response.status >= 500) {
           code = 'serverError';
-        } else if (!csrfTokenValid) {
-          // If we knew CSRF was invalid and login failed, suggest cache clear
-          code = 'csrfError';
-          message = 'Login failed due to cached data. Please clear your browser cache and try again.';
-          shouldClearCache = true;
         }
 
         // Clear cache on CSRF-related errors
@@ -268,6 +296,74 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     }
   }, []);
 
+  /**
+   * Invite redemption. POSTs /api/auth/register via the ipcBridge HTTP route;
+   * on success the backend has already set the session cookies, so this runs
+   * the same bootstrap the login success path uses (user + authenticated state,
+   * WS reconnect). Failure maps the backend error to a coarse client code.
+   */
+  const register = useCallback(
+    async ({ code, username, password }: RegisterParams): Promise<RegisterResult> => {
+      if (isDesktopRuntime) {
+        return { success: false, code: 'unknown', message: 'Registration requires the web app' };
+      }
+      try {
+        const user = await ipcBridge.auth.register.invoke({ code: code.trim(), username: username.trim(), password });
+
+        if (user?.id) {
+          setUser(user);
+          setStatus('authenticated');
+          setReady(true);
+        } else {
+          // Unexpected response shape — fall back to the standard session
+          // bootstrap; it either resolves the fresh session or reports
+          // unauthenticated, which we surface as a failure.
+          const bootstrapped = await refresh();
+          if (!bootstrapped) {
+            return { success: false, code: 'unknown' };
+          }
+        }
+
+        // Re-enable WebSocket reconnection after successful registration
+        if (typeof window !== 'undefined' && (window as { __websocketReconnect?: () => void }).__websocketReconnect) {
+          (window as { __websocketReconnect?: () => void }).__websocketReconnect?.();
+        }
+
+        return { success: true };
+      } catch (error) {
+        if (isBackendHttpError(error)) {
+          const backendCode = error.code.toLowerCase();
+          let code: RegisterErrorCode = 'unknown';
+          if (error.status === 429) {
+            code = 'rateLimited';
+          } else if (error.status >= 500) {
+            code = 'serverError';
+          } else if (backendCode.includes('expire') || error.status === 410) {
+            code = 'expiredCode';
+          } else if (
+            backendCode.includes('password') &&
+            (backendCode.includes('weak') || backendCode.includes('invalid') || backendCode.includes('policy'))
+          ) {
+            code = 'weakPassword';
+          } else if (
+            backendCode.includes('taken') ||
+            backendCode.includes('exists') ||
+            backendCode.includes('conflict') ||
+            error.status === 409
+          ) {
+            code = 'usernameTaken';
+          } else if (error.status === 400 || error.status === 401 || error.status === 403 || error.status === 404) {
+            code = 'invalidCode';
+          }
+          return { success: false, code, message: error.backendMessage || undefined };
+        }
+        console.error('Register request failed:', error);
+        return { success: false, code: 'networkError' };
+      }
+    },
+    [refresh]
+  );
+
   const logout = useCallback(async () => {
     if (isDesktopRuntime) {
       setUser(null);
@@ -282,9 +378,10 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
         // Logout also needs CSRF token / 登出同样需要 CSRF Token
         headers: {
           'Content-Type': 'application/json',
+          ...csrfHeaders(),
         },
         credentials: 'include',
-        body: JSON.stringify(withCsrfToken({})),
+        body: JSON.stringify({}),
       });
     } catch (error) {
       console.error('Logout request failed:', error);
@@ -302,11 +399,12 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
       user,
       status,
       login,
+      register,
       logout,
       refresh,
       clearAuthCache,
     }),
-    [login, logout, ready, refresh, status, user]
+    [login, register, logout, ready, refresh, status, user]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
