@@ -167,16 +167,14 @@ const RegisterPage: React.FC = () => {
               },
             ]}
           >
-            <Input.Password placeholder={t('login.register.confirmPassword')} autoComplete='new-password' visibilityToggle />
+            <Input.Password
+              placeholder={t('login.register.confirmPassword')}
+              autoComplete='new-password'
+              visibilityToggle
+            />
           </Form.Item>
 
-          <Button
-            type='primary'
-            htmlType='submit'
-            long
-            loading={loading}
-            className='register-page__submit'
-          >
+          <Button type='primary' htmlType='submit' long loading={loading} className='register-page__submit'>
             {loading ? t('login.register.submitting') : t('login.register.submit')}
           </Button>
         </Form>

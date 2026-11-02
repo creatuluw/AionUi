@@ -12,6 +12,7 @@ import {
   Info,
   Lightning,
   LinkCloud,
+  Peoples,
   Puzzle,
   Speed,
   System,
@@ -23,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Tooltip } from '@arco-design/web-react';
 import { getSiderTooltipProps } from '@/renderer/utils/ui/siderTooltip';
+import { useAuth } from '@renderer/hooks/context/AuthContext';
 
 /** Builtin settings tab IDs in display order (must match router paths). */
 export const BUILTIN_TAB_IDS = [
@@ -33,6 +35,7 @@ export const BUILTIN_TAB_IDS = [
   'appearance',
   'webui',
   'pet',
+  'admin',
   'system',
   'archived',
   'about',
@@ -57,6 +60,7 @@ export const LEGACY_ANCHOR_REMAP: Record<string, string> = {
 const GROUP_HEADER_BEFORE: Record<string, string> = {
   agent: 'settings.groupAiCore',
   appearance: 'settings.groupApp',
+  admin: 'settings.groupApp',
   archived: 'settings.archived.title',
   about: 'settings.groupAbout',
 };
@@ -78,6 +82,9 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const isDesktop = isElectronDesktop();
+  // Admin console is only visible to admins (populated in WebUI mode; desktop
+  // keeps user === null so the entry never shows there).
+  const isAdmin = useAuth().user?.role === 'admin';
 
   const extensionTabs = useExtensionSettingsTabs();
   const { resolveExtTabName } = useExtI18n();
@@ -112,6 +119,7 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
         path: 'webui',
       },
       pet: { id: 'pet', label: t('pet.desktopPet'), icon: <Cat />, path: 'pet' },
+      admin: { id: 'admin', label: t('settings.admin.navLabel'), icon: <Peoples />, path: 'admin' },
       system: { id: 'system', label: t('settings.system'), icon: <System />, path: 'system' },
       archived: {
         id: 'archived',
@@ -123,7 +131,10 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
     };
 
     // Start with ordered builtin IDs, hiding desktop-only tabs in browser mode
-    const result: SiderItem[] = BUILTIN_TAB_IDS.filter((id) => isDesktop || id !== 'pet').map((id) => builtinMap[id]);
+    // and the admin console for non-admins.
+    const result: SiderItem[] = BUILTIN_TAB_IDS.filter(
+      (id) => (isDesktop || id !== 'pet') && (isAdmin || id !== 'admin')
+    ).map((id) => builtinMap[id]);
 
     // Extension tabs with position anchoring
     const beforeMap = new Map<string, IExtensionSettingsTab[]>();
@@ -197,7 +208,7 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
     }
 
     return { menus: result, groupHeaderAt: headerAt };
-  }, [t, isDesktop, extensionTabs, resolveExtTabName]);
+  }, [t, isDesktop, isAdmin, extensionTabs, resolveExtTabName]);
 
   const siderTooltipProps = getSiderTooltipProps(tooltipEnabled);
   return (

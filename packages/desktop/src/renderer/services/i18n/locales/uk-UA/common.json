@@ -205,5 +205,7 @@
   },
   "selectedCount": "Вибрано {{count}}",
   "selectedSkills": "Вибрані навички",
-  "aiAssistant": "ШІ-асистент"
+  "aiAssistant": "ШІ-асистент",
+  "actions": "Дії",
+  "copied": "Скопійовано"
 }

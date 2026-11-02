@@ -1415,5 +1415,75 @@
   "crossSessionMessageDesc": "允许 Agent 向你的其他会话发送消息。关闭后，输入框的 @@ 会话提及与投递能力同时停用。",
   "crossSessionMessageDisabledBanner": "跨会话消息已关闭，输入框的 @@ 会话提及不可用。",
   "crossSessionMessageResume": "重新开启",
-  "crossSessionMessageUpdateFailed": "跨会话消息设置更新失败"
+  "crossSessionMessageUpdateFailed": "跨会话消息设置更新失败",
+  "admin": {
+    "navLabel": "管理",
+    "title": "管理控制台",
+    "description": "管理用户、邀请码和共享池",
+    "tabs": {
+      "users": "用户",
+      "invites": "邀请码",
+      "pool": "共享池设置"
+    },
+    "users": {
+      "username": "用户名",
+      "role": "角色",
+      "status": "状态",
+      "actions": "操作",
+      "active": "正常",
+      "disabled": "已禁用",
+      "roleAdmin": "管理员",
+      "roleMember": "成员",
+      "provision": "添加用户",
+      "provisionTitle": "创建用户",
+      "provisionSuccess": "用户已创建",
+      "provisionFailed": "创建用户失败",
+      "newPassword": "密码",
+      "setPassword": "设置密码",
+      "setPasswordTitle": "为 {{name}} 设置密码",
+      "passwordChanged": "密码已更新",
+      "disable": "禁用",
+      "enable": "启用",
+      "disableConfirm": "禁用 {{name}}？该用户将无法登录。",
+      "cannotDisableSelf": "不能禁用自己的账号",
+      "cannotChangeSelf": "不能修改自己的角色",
+      "roleChanged": "角色已更新",
+      "actionFailed": "操作失败",
+      "loadFailed": "加载用户失败"
+    },
+    "invites": {
+      "hint": "邀请码仅在创建时显示一次——请先复制再关闭。",
+      "create": "创建邀请码",
+      "createTitle": "创建邀请码",
+      "createFailed": "创建邀请码失败",
+      "expiryHours": "有效期（小时）",
+      "expiryHint": "留空表示永不过期",
+      "code": "邀请码",
+      "status": {
+        "active": "有效",
+        "used": "已使用",
+        "expired": "已过期",
+        "revoked": "已撤销"
+      },
+      "codeTitle": "邀请码",
+      "codeWarning": "请立即复制此邀请码——之后将不再显示。",
+      "createdAt": "创建时间",
+      "expiresAt": "过期时间",
+      "usedAt": "使用时间",
+      "revoke": "撤销",
+      "revokeConfirm": "撤销此邀请码？撤销后将无法使用。",
+      "revokeFailed": "撤销邀请码失败",
+      "loadFailed": "加载邀请码失败",
+      "statusLabel": "状态"
+    },
+    "pool": {
+      "sharedEnabled": "共享密钥服务",
+      "sharedEnabledDesc": "允许没有自己 API 密钥的成员使用共享供应商池",
+      "dailyCap": "每日请求上限",
+      "dailyCapDesc": "共享池每日最大请求数（0 = 不限制）",
+      "saved": "设置已保存",
+      "saveFailed": "保存设置失败",
+      "loadFailed": "加载共享池设置失败"
+    }
+  }
 }

@@ -202,5 +202,7 @@
   },
   "selectedCount": "已選 {{count}}",
   "selectedSkills": "已選技能",
-  "aiAssistant": "AI 助手"
+  "aiAssistant": "AI 助手",
+  "actions": "操作",
+  "copied": "已複製"
 }

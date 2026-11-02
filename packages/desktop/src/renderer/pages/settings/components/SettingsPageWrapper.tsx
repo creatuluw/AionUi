@@ -17,6 +17,7 @@ import {
   Info,
   Lightning,
   LinkCloud,
+  Peoples,
   Puzzle,
   Robot,
   System,
@@ -24,6 +25,7 @@ import {
 } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '@renderer/hooks/context/AuthContext';
 import { useExtI18n } from '@/renderer/hooks/system/useExtI18n';
 import { BUILTIN_TAB_IDS, LEGACY_ANCHOR_REMAP } from './SettingsSider';
 import './settings.css';
@@ -78,6 +80,12 @@ export function getBuiltinSettingsNavItems(isDesktop: boolean, t: TranslateFn): 
       path: 'webui',
     },
     pet: { id: 'pet', label: t('pet.desktopPet'), icon: <Cat theme='outline' size='16' />, path: 'pet' },
+    admin: {
+      id: 'admin',
+      label: t('settings.admin.navLabel'),
+      icon: <Peoples theme='outline' size='16' />,
+      path: 'admin',
+    },
     system: { id: 'system', label: t('settings.system'), icon: <System theme='outline' size='16' />, path: 'system' },
     archived: {
       id: 'archived',
@@ -98,13 +106,16 @@ const SettingsPageWrapper: React.FC<SettingsPageWrapperProps> = ({ children, cla
   const { pathname } = useLocation();
   const { t } = useTranslation();
   const isDesktop = isElectronDesktop();
+  // Mirrors SettingsSider: admin console entry only for admins (WebUI mode;
+  // desktop keeps user === null so the entry never shows there).
+  const isAdmin = useAuth().user?.role === 'admin';
 
   const extensionTabs = useExtensionSettingsTabs();
 
   const { resolveExtTabName } = useExtI18n();
 
   const menuItems = React.useMemo(() => {
-    const builtins = getBuiltinSettingsNavItems(isDesktop, t);
+    const builtins = getBuiltinSettingsNavItems(isDesktop, t).filter((item) => isAdmin || item.id !== 'admin');
 
     // Insert extension tabs before system (unanchored default) or at anchor position
     const result = [...builtins];
@@ -161,7 +172,7 @@ const SettingsPageWrapper: React.FC<SettingsPageWrapperProps> = ({ children, cla
     }
 
     return result;
-  }, [isDesktop, t, extensionTabs, resolveExtTabName]);
+  }, [isDesktop, isAdmin, t, extensionTabs, resolveExtTabName]);
 
   // Keep only horizontal padding on the scroll container — vertical padding is
   // moved to the content layer below. A sticky header inside a scroll container

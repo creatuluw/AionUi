@@ -1414,5 +1414,75 @@
   "crossSessionMessageDesc": "Permet aux agents d'envoyer des messages à vos autres conversations. La désactivation coupe aussi la mention @@ dans la zone de saisie.",
   "crossSessionMessageDisabledBanner": "Les messages entre conversations sont désactivés, la mention @@ est indisponible.",
   "crossSessionMessageResume": "Réactiver",
-  "crossSessionMessageUpdateFailed": "Échec de la mise à jour du réglage des messages entre conversations"
+  "crossSessionMessageUpdateFailed": "Échec de la mise à jour du réglage des messages entre conversations",
+  "admin": {
+    "navLabel": "Administration",
+    "title": "Console d'administration",
+    "description": "Gérez les utilisateurs, les invitations et le pool partagé",
+    "tabs": {
+      "users": "Utilisateurs",
+      "invites": "Invitations",
+      "pool": "Paramètres du pool"
+    },
+    "users": {
+      "username": "Nom d'utilisateur",
+      "role": "Rôle",
+      "status": "Statut",
+      "actions": "Actions",
+      "active": "Actif",
+      "disabled": "Désactivé",
+      "roleAdmin": "Administrateur",
+      "roleMember": "Membre",
+      "provision": "Ajouter un utilisateur",
+      "provisionTitle": "Créer un utilisateur",
+      "provisionSuccess": "Utilisateur créé",
+      "provisionFailed": "Échec de la création de l'utilisateur",
+      "newPassword": "Mot de passe",
+      "setPassword": "Définir le mot de passe",
+      "setPasswordTitle": "Définir le mot de passe de {{name}}",
+      "passwordChanged": "Mot de passe mis à jour",
+      "disable": "Désactiver",
+      "enable": "Activer",
+      "disableConfirm": "Désactiver {{name}} ? Il ne pourra plus se connecter.",
+      "cannotDisableSelf": "Vous ne pouvez pas désactiver votre propre compte",
+      "cannotChangeSelf": "Vous ne pouvez pas modifier votre propre rôle",
+      "roleChanged": "Rôle mis à jour",
+      "actionFailed": "Échec de l'action",
+      "loadFailed": "Échec du chargement des utilisateurs"
+    },
+    "invites": {
+      "hint": "Le code d'invitation n'est affiché qu'une seule fois à la création — copiez-le avant de fermer.",
+      "create": "Créer une invitation",
+      "createTitle": "Créer une invitation",
+      "createFailed": "Échec de la création de l'invitation",
+      "expiryHours": "Expire dans (heures)",
+      "expiryHint": "Laisser vide pour aucune expiration",
+      "code": "Code",
+      "status": {
+        "active": "Active",
+        "used": "Utilisée",
+        "expired": "Expirée",
+        "revoked": "Révoquée"
+      },
+      "codeTitle": "Code d'invitation",
+      "codeWarning": "Copiez ce code maintenant — il ne sera plus affiché.",
+      "createdAt": "Créée le",
+      "expiresAt": "Expire le",
+      "usedAt": "Utilisée le",
+      "revoke": "Révoquer",
+      "revokeConfirm": "Révoquer cette invitation ? Elle ne pourra plus être utilisée.",
+      "revokeFailed": "Échec de la révocation de l'invitation",
+      "loadFailed": "Échec du chargement des invitations",
+      "statusLabel": "Statut"
+    },
+    "pool": {
+      "sharedEnabled": "Service de clé partagée",
+      "sharedEnabledDesc": "Permettre aux membres sans leurs propres clés API d’utiliser le pool de fournisseurs partagé",
+      "dailyCap": "Limite quotidienne de requêtes",
+      "dailyCapDesc": "Nombre maximum de requêtes au pool par jour (0 = illimité)",
+      "saved": "Paramètres enregistrés",
+      "saveFailed": "Échec de l’enregistrement des paramètres",
+      "loadFailed": "Échec du chargement des paramètres du pool"
+    }
+  }
 }

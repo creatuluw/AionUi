@@ -1416,5 +1416,75 @@
   "crossSessionMessageDesc": "允許 Agent 向你的其他對話傳送訊息。關閉後，輸入框的 @@ 對話提及與投遞功能會同時停用。",
   "crossSessionMessageDisabledBanner": "跨對話訊息已關閉，輸入框的 @@ 對話提及不可用。",
   "crossSessionMessageResume": "重新開啟",
-  "crossSessionMessageUpdateFailed": "跨對話訊息設定更新失敗"
+  "crossSessionMessageUpdateFailed": "跨對話訊息設定更新失敗",
+  "admin": {
+    "navLabel": "管理",
+    "title": "管理控制台",
+    "description": "管理使用者、邀請碼和共享池",
+    "tabs": {
+      "users": "使用者",
+      "invites": "邀請碼",
+      "pool": "共享池設定"
+    },
+    "users": {
+      "username": "使用者名稱",
+      "role": "角色",
+      "status": "狀態",
+      "actions": "操作",
+      "active": "正常",
+      "disabled": "已停用",
+      "roleAdmin": "管理員",
+      "roleMember": "成員",
+      "provision": "新增使用者",
+      "provisionTitle": "建立使用者",
+      "provisionSuccess": "使用者已建立",
+      "provisionFailed": "建立使用者失敗",
+      "newPassword": "密碼",
+      "setPassword": "設定密碼",
+      "setPasswordTitle": "為 {{name}} 設定密碼",
+      "passwordChanged": "密碼已更新",
+      "disable": "停用",
+      "enable": "啟用",
+      "disableConfirm": "停用 {{name}}？該使用者將無法登入。",
+      "cannotDisableSelf": "不能停用自己的帳號",
+      "cannotChangeSelf": "不能修改自己的角色",
+      "roleChanged": "角色已更新",
+      "actionFailed": "操作失敗",
+      "loadFailed": "載入使用者失敗"
+    },
+    "invites": {
+      "hint": "邀請碼僅在建立時顯示一次——請先複製再關閉。",
+      "create": "建立邀請碼",
+      "createTitle": "建立邀請碼",
+      "createFailed": "建立邀請碼失敗",
+      "expiryHours": "有效期（小時）",
+      "expiryHint": "留空表示永不過期",
+      "code": "邀請碼",
+      "status": {
+        "active": "有效",
+        "used": "已使用",
+        "expired": "已過期",
+        "revoked": "已撤銷"
+      },
+      "codeTitle": "邀請碼",
+      "codeWarning": "請立即複製此邀請碼——之後將不再顯示。",
+      "createdAt": "建立時間",
+      "expiresAt": "到期時間",
+      "usedAt": "使用時間",
+      "revoke": "撤銷",
+      "revokeConfirm": "撤銷此邀請碼？撤銷後將無法使用。",
+      "revokeFailed": "撤銷邀請碼失敗",
+      "loadFailed": "載入邀請碼失敗",
+      "statusLabel": "狀態"
+    },
+    "pool": {
+      "sharedEnabled": "共享金鑰服務",
+      "sharedEnabledDesc": "允許沒有自己的 API 金鑰的成員使用共享供應商池",
+      "dailyCap": "每日請求上限",
+      "dailyCapDesc": "共享池每日最大請求數（0 = 不限制）",
+      "saved": "設定已儲存",
+      "saveFailed": "儲存設定失敗",
+      "loadFailed": "載入共享池設定失敗"
+    }
+  }
 }
