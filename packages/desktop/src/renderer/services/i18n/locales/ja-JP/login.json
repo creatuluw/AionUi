@@ -22,5 +22,31 @@
     "networkError": "接続に失敗しました。後でもう一度お試しください",
     "serverError": "サーバーで問題が発生しました。しばらく待ってから再試行してください",
     "unknown": "ログインに失敗しました。後でもう一度お試しください"
+  },
+  "haveInvite": "招待コードをお持ちですか？アカウント登録",
+  "register": {
+    "subtitle": "招待コードでアカウントを作成",
+    "inviteCode": "招待コード",
+    "inviteCodePlaceholder": "招待コードを入力",
+    "confirmPassword": "パスワード（確認）",
+    "submit": "アカウント作成",
+    "submitting": "アカウントを作成中...",
+    "success": "アカウントを作成しました！ログイン中...",
+    "backToLogin": "アカウントをお持ちですか？サインイン",
+    "errors": {
+      "codeRequired": "招待コードを入力してください",
+      "usernameRequired": "ユーザー名を入力してください",
+      "passwordRequired": "パスワードを入力してください",
+      "confirmRequired": "パスワードを再度入力してください",
+      "passwordMismatch": "パスワードが一致しません",
+      "invalidCode": "招待コードが無効です",
+      "expiredCode": "この招待コードは期限切れです",
+      "usernameTaken": "そのユーザー名は既に使用されています",
+      "weakPassword": "パスワードが要件を満たしていません",
+      "rateLimited": "試行回数が多すぎます。しばらくしてからお試しください",
+      "networkError": "接続に失敗しました。もう一度お試しください",
+      "serverError": "サーバーエラーです。しばらくしてからお試しください",
+      "unknown": "登録に失敗しました。もう一度お試しください"
+    }
   }
 }

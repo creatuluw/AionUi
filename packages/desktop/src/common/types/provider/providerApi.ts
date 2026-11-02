@@ -24,7 +24,12 @@ export interface CreateProviderRequest {
   platform: string;
   name: string;
   base_url: string;
-  api_key: string;
+  /**
+   * New API key. Optional in the type so callers can omit it when the user did
+   * not enter one (e.g. re-saving a masked shared provider); the backend
+   * decides whether a key is required for the platform.
+   */
+  api_key?: string;
   models?: string[];
   enabled?: boolean;
   capabilities?: ModelCapability[];
@@ -45,6 +50,11 @@ export interface UpdateProviderRequest {
   platform?: string;
   name?: string;
   base_url?: string;
+  /**
+   * Send ONLY when the user entered a new key. Omitting it keeps the stored
+   * key; sending `undefined`-free JSON means a masked provider can be re-saved
+   * without ever seeing (or clobbering) the secret.
+   */
   api_key?: string;
   models?: string[];
   enabled?: boolean;
@@ -56,6 +66,22 @@ export interface UpdateProviderRequest {
   model_settings?: IProvider['model_settings'];
   bedrock_config?: IProvider['bedrock_config'];
   is_full_url?: boolean;
+}
+
+/**
+ * Provider row as returned by the multi-user backend list/detail endpoints:
+ * the plaintext `api_key` is replaced by `masked_key` + `has_key`, and the
+ * row carries sharing metadata. Mirrors the optional fields on `IProvider`.
+ */
+export interface ProviderKeyMetadata {
+  /** Masked key, e.g. "sk-***abc" — present instead of the plaintext key. */
+  masked_key?: string;
+  /** True when a key is stored server-side even though it is withheld here. */
+  has_key?: boolean;
+  /** `shared` providers are visible to every member of the deployment. */
+  visibility?: 'private' | 'shared';
+  /** False when the current user does not own the provider (read-only row). */
+  owned?: boolean;
 }
 
 /**
@@ -76,7 +102,8 @@ export interface FetchModelsResponse {
 export interface FetchModelsAnonymousRequest {
   platform: string;
   base_url?: string;
-  api_key: string;
+  /** Plaintext key for the pre-create probe (never persisted server-side). */
+  api_key?: string;
   bedrock_config?: IProvider['bedrock_config'];
   try_fix?: boolean;
 }

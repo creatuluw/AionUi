@@ -1,0 +1,47 @@
+/*
+ * Register page — extends the shared login-page look (LoginPage.css) with
+ * Arco-Design form styling. The login page uses bespoke raw-HTML inputs; this
+ * page is Arco-based (project rule: no raw interactive HTML in new UI), so a
+ * few scoped overrides keep both pages visually consistent.
+ */
+
+.register-page__card {
+  max-width: 400px;
+}
+
+.register-page__form .arco-form-item {
+  margin-bottom: 16px;
+}
+
+/* Match the bespoke login inputs: comfortable height, soft border. */
+.register-page__form .arco-input-wrapper,
+.register-page__form .arco-select-view-single {
+  border-radius: 10px;
+}
+
+.register-page__form .arco-input {
+  height: 38px;
+}
+
+.register-page__submit {
+  height: 40px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.register-page__signin-link {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.register-page__signin-link a {
+  color: rgb(var(--primary-6));
+  text-decoration: none;
+}
+
+.register-page__signin-link a:hover {
+  text-decoration: underline;
+}

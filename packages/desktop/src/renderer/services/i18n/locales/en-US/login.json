@@ -22,5 +22,31 @@
     "networkError": "Connection failed, please try again",
     "serverError": "Server error, please try again later",
     "unknown": "Sign-in failed, please try again"
+  },
+  "haveInvite": "Have an invite code? Sign up",
+  "register": {
+    "subtitle": "Create your account with an invite code",
+    "inviteCode": "Invite code",
+    "inviteCodePlaceholder": "Enter your invite code",
+    "confirmPassword": "Confirm password",
+    "submit": "Create account",
+    "submitting": "Creating account...",
+    "success": "Account created! Signing you in...",
+    "backToLogin": "Already have an account? Sign in",
+    "errors": {
+      "codeRequired": "Please enter your invite code",
+      "usernameRequired": "Please enter a username",
+      "passwordRequired": "Please enter a password",
+      "confirmRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match",
+      "invalidCode": "Invalid invite code",
+      "expiredCode": "This invite code has expired",
+      "usernameTaken": "Username is already taken",
+      "weakPassword": "Password does not meet the requirements",
+      "rateLimited": "Too many attempts, please try again later",
+      "networkError": "Connection failed, please try again",
+      "serverError": "Server error, please try again later",
+      "unknown": "Sign-up failed, please try again"
+    }
   }
 }

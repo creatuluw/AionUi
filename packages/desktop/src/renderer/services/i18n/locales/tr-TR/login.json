@@ -22,5 +22,31 @@
     "networkError": "Bağlantı başarısız, lütfen tekrar deneyin",
     "serverError": "Sunucu hatası, lütfen daha sonra tekrar deneyin",
     "unknown": "Giriş başarısız, lütfen tekrar deneyin"
+  },
+  "haveInvite": "Davet kodunuz mu var? Kayıt olun",
+  "register": {
+    "subtitle": "Davet koduyla hesabınızı oluşturun",
+    "inviteCode": "Davet kodu",
+    "inviteCodePlaceholder": "Davet kodunuzu girin",
+    "confirmPassword": "Şifreyi onayla",
+    "submit": "Hesap oluştur",
+    "submitting": "Hesap oluşturuluyor...",
+    "success": "Hesap oluşturuldu! Giriş yapılıyor...",
+    "backToLogin": "Zaten hesabınız var mı? Giriş yapın",
+    "errors": {
+      "codeRequired": "Lütfen davet kodunuzu girin",
+      "usernameRequired": "Lütfen bir kullanıcı adı girin",
+      "passwordRequired": "Lütfen bir şifre girin",
+      "confirmRequired": "Lütfen şifreyi onaylayın",
+      "passwordMismatch": "Şifreler eşleşmiyor",
+      "invalidCode": "Geçersiz davet kodu",
+      "expiredCode": "Bu davet kodunun süresi dolmuş",
+      "usernameTaken": "Bu kullanıcı adı zaten alınmış",
+      "weakPassword": "Şifre gereksinimleri karşılamıyor",
+      "rateLimited": "Çok fazla deneme yapıldı, lütfen daha sonra tekrar deneyin",
+      "networkError": "Bağlantı başarısız, lütfen tekrar deneyin",
+      "serverError": "Sunucu hatası, lütfen daha sonra tekrar deneyin",
+      "unknown": "Kayıt başarısız oldu, lütfen tekrar deneyin"
+    }
   }
 }

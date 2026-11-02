@@ -22,5 +22,31 @@
     "networkError": "Connexion échouée, veuillez réessayer",
     "serverError": "Erreur serveur, veuillez réessayer plus tard",
     "unknown": "Échec de connexion, veuillez réessayer"
+  },
+  "haveInvite": "Vous avez un code d'invitation ? Inscrivez-vous",
+  "register": {
+    "subtitle": "Créez votre compte avec un code d'invitation",
+    "inviteCode": "Code d'invitation",
+    "inviteCodePlaceholder": "Saisissez votre code d'invitation",
+    "confirmPassword": "Confirmer le mot de passe",
+    "submit": "Créer un compte",
+    "submitting": "Création du compte...",
+    "success": "Compte créé ! Connexion en cours...",
+    "backToLogin": "Vous avez déjà un compte ? Se connecter",
+    "errors": {
+      "codeRequired": "Veuillez saisir votre code d'invitation",
+      "usernameRequired": "Veuillez saisir un nom d'utilisateur",
+      "passwordRequired": "Veuillez saisir un mot de passe",
+      "confirmRequired": "Veuillez confirmer votre mot de passe",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "invalidCode": "Code d'invitation invalide",
+      "expiredCode": "Ce code d'invitation a expiré",
+      "usernameTaken": "Ce nom d'utilisateur est déjà pris",
+      "weakPassword": "Le mot de passe ne respecte pas les exigences",
+      "rateLimited": "Trop de tentatives, veuillez réessayer plus tard",
+      "networkError": "Échec de la connexion, veuillez réessayer",
+      "serverError": "Erreur du serveur, veuillez réessayer plus tard",
+      "unknown": "Échec de l'inscription, veuillez réessayer"
+    }
   }
 }

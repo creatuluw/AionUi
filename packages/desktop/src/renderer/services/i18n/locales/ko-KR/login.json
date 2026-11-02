@@ -22,5 +22,31 @@
     "networkError": "연결 실패, 다시 시도하세요",
     "serverError": "서버 오류, 나중에 다시 시도하세요",
     "unknown": "로그인 실패, 다시 시도하세요"
+  },
+  "haveInvite": "초대 코드가 있으신가요? 회원가입",
+  "register": {
+    "subtitle": "초대 코드로 계정을 만드세요",
+    "inviteCode": "초대 코드",
+    "inviteCodePlaceholder": "초대 코드를 입력하세요",
+    "confirmPassword": "비밀번호 확인",
+    "submit": "계정 만들기",
+    "submitting": "계정을 만드는 중...",
+    "success": "계정이 생성되었습니다! 로그인 중...",
+    "backToLogin": "이미 계정이 있으신가요? 로그인",
+    "errors": {
+      "codeRequired": "초대 코드를 입력해 주세요",
+      "usernameRequired": "사용자 이름을 입력해 주세요",
+      "passwordRequired": "비밀번호를 입력해 주세요",
+      "confirmRequired": "비밀번호를 다시 입력해 주세요",
+      "passwordMismatch": "비밀번호가 일치하지 않습니다",
+      "invalidCode": "유효하지 않은 초대 코드입니다",
+      "expiredCode": "이 초대 코드는 만료되었습니다",
+      "usernameTaken": "이미 사용 중인 사용자 이름입니다",
+      "weakPassword": "비밀번호가 요구 사항을 충족하지 않습니다",
+      "rateLimited": "시도 횟수가 너무 많습니다. 잠시 후 다시 시도해 주세요",
+      "networkError": "연결에 실패했습니다. 다시 시도해 주세요",
+      "serverError": "서버 오류입니다. 잠시 후 다시 시도해 주세요",
+      "unknown": "회원가입에 실패했습니다. 다시 시도해 주세요"
+    }
   }
 }
