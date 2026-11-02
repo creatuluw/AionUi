@@ -665,7 +665,10 @@ export class BackendLifecycleManager {
     const args = buildSpawnArgs({
       port: this._port,
       dbPath,
-      local: true,
+      // AIONUI_REMOTE_AUTH=1: serving untrusted networks — keep aioncore's JWT
+      // cookie auth + CSRF enforcement ON. Default stays `--local` (the Electron
+      // renderer and trusted-LAN WebUI speak to a loopback backend).
+      local: process.env.AIONUI_REMOTE_AUTH !== '1',
       parentPid: process.pid,
       logDir,
       workDir: dirs?.workDir,

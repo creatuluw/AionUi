@@ -1,7 +1,14 @@
 node_modules
 out
-dist-server
+dist
+dist-web-cli
+resources/bundled-aioncore
 .git
 .github
-data
+tests
+playwright-report
+test-results
+docs
 *.log
+.wiki-tmp
+.wiki_ignore

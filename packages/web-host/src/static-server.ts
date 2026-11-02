@@ -76,13 +76,36 @@ function getLanIP(): string | null {
   return pickLanIP(networkInterfaces());
 }
 
+/**
+ * Bridge CSRF for remote-auth deployments (AIONUI_REMOTE_AUTH=1): aioncore
+ * enforces double-submit CSRF whenever it runs without --local, but the SPA
+ * may not send x-csrf-token yet. For same-origin browser requests, copy the
+ * aionui-csrf-token cookie into the x-csrf-token header. Cross-site requests
+ * (Origin host ≠ Host) pass through untouched and still fail the check.
+ */
+function withCsrfHeader(req: IncomingMessage): http.IncomingHttpHeaders {
+  const headers = { ...req.headers };
+  if (headers['x-csrf-token']) return headers;
+  const origin = req.headers.origin;
+  let sameOrigin = false;
+  try {
+    sameOrigin = !!origin && new URL(origin).host === req.headers.host;
+  } catch {
+    sameOrigin = false;
+  }
+  if (!sameOrigin) return headers;
+  const token = /(?:^|;\s*)aionui-csrf-token=([^;]+)/.exec(req.headers.cookie ?? '')?.[1];
+  if (token) headers['x-csrf-token'] = token;
+  return headers;
+}
+
 function forwardToBackend(req: IncomingMessage, res: ServerResponse, backendPort: number): void {
   const options: http.RequestOptions = {
     hostname: '127.0.0.1',
     port: backendPort,
     path: req.url,
     method: req.method,
-    headers: { ...req.headers, host: `127.0.0.1:${backendPort}` },
+    headers: { ...withCsrfHeader(req), host: `127.0.0.1:${backendPort}` },
   };
   const proxy = http.request(options, (proxyRes) => {
     res.writeHead(proxyRes.statusCode ?? 502, proxyRes.headers);
