@@ -23,3 +23,5 @@
 *.woff binary
 *.woff2 binary
 *.ttf binary
+*.sh text eol=lf
+entrypoint.sh text eol=lf
