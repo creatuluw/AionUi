@@ -1484,5 +1484,8 @@
       "saveFailed": "Failed to save settings",
       "loadFailed": "Failed to load pool settings"
     }
-  }
+  },
+  "sharedProviderTag": "Shared",
+  "sharedProviderTooltip": "Shared by an admin — read-only for you",
+  "apiKeyKeepExisting": "Leave empty to keep the current key; enter a new key to replace it."
 }

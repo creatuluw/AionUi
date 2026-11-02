@@ -1485,5 +1485,8 @@
       "saveFailed": "保存设置失败",
       "loadFailed": "加载共享池设置失败"
     }
-  }
+  },
+  "sharedProviderTag": "共享",
+  "sharedProviderTooltip": "由管理员共享——对你只读",
+  "apiKeyKeepExisting": "留空保留当前密钥；输入新密钥将替换它。"
 }

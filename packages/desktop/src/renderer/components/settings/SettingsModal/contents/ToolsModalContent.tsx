@@ -337,7 +337,7 @@ const ToolsModalContent: React.FC = () => {
           resolution.provider.id,
           resolution.provider.platform,
           resolution.model,
-          resolution.provider.api_key ? 'yes' : 'no'
+          resolution.provider.api_key || resolution.provider.has_key ? 'yes' : 'no'
         );
       }
 

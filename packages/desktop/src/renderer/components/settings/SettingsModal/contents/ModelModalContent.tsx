@@ -68,11 +68,33 @@ const getNextProtocol = (current: string): string => {
   return NEW_API_PROTOCOL_OPTIONS[nextIdx].value;
 };
 
-// Calculate API Key count
-const getApiKeyCount = (api_key: string): number => {
+// Calculate API Key count (plaintext keys, local/desktop mode).
+// In multi-user mode the plaintext key is withheld — the row carries
+// `has_key`/`masked_key` instead and we show the masked hint or a check.
+const getApiKeyCount = (api_key: string | undefined): number => {
   if (!api_key) return 0;
   return api_key.split(/[,\n]/).filter((k) => k.trim().length > 0).length;
 };
+
+/**
+ * Key summary for a provider row: the key count when the plaintext key is
+ * present, otherwise the backend mask / a check when a stored key exists.
+ */
+const getApiKeySummary = (platform: IProvider): string => {
+  if (platform.api_key) {
+    return String(getApiKeyCount(platform.api_key));
+  }
+  if (platform.has_key) {
+    return platform.masked_key || '✓';
+  }
+  return '0';
+};
+
+/**
+ * A provider row is editable only when the current user owns it. The field is
+ * absent in desktop/local mode — default to editable there.
+ */
+const canManageProvider = (platform: IProvider): boolean => platform.owned !== false;
 
 /**
  * 获取供应商的启用状态（全选/半选/全不选）
@@ -288,8 +310,12 @@ const ModelModalContent: React.FC = () => {
     }));
     void mutate(nextArray, false);
 
+    // Only persist the clear for providers the current user manages — the
+    // backend rejects writes to non-owned shared rows.
     Promise.all(
-      (data || []).map((platform) => ipcBridge.mode.updateProvider.invoke({ id: platform.id, model_health: {} }))
+      (data || [])
+        .filter(canManageProvider)
+        .map((platform) => ipcBridge.mode.updateProvider.invoke({ id: platform.id, model_health: {} }))
     )
       .then(() => {
         void mutate();
@@ -450,6 +476,13 @@ const ModelModalContent: React.FC = () => {
                         >
                           {platform.name}
                         </span>
+                        {platform.visibility === 'shared' && (
+                          <Tooltip content={t('settings.sharedProviderTooltip')}>
+                            <Tag size='small' color='arcoblue' className='shrink-0'>
+                              {t('settings.sharedProviderTag')}
+                            </Tag>
+                          </Tooltip>
+                        )}
                         <div
                           className='flex items-center gap-8px shrink-0'
                           onClick={(e) => {
@@ -471,42 +504,46 @@ const ModelModalContent: React.FC = () => {
                               className='cursor-pointer hover:text-t-primary transition-colors'
                               onClick={() => editModalCtrl.open({ data: platform })}
                             >
-                              {t('settings.apiKeyCount')}（{getApiKeyCount(platform.api_key)}）
+                              {t('settings.apiKeyCount')}（{getApiKeySummary(platform)}）
                             </span>
                           </span>
                           <span className='text-12px text-t-secondary whitespace-nowrap md:hidden'>
-                            {(platform.models ?? []).length} / {getApiKeyCount(platform.api_key)}
+                            {(platform.models ?? []).length} / {getApiKeySummary(platform)}
                           </span>
-                          {/* 供应商启用开关 / Provider enable switch */}
-                          <Switch
-                            size='small'
-                            checked={getProviderState(platform).checked}
-                            onChange={() => toggleProviderEnabled(platform)}
-                          />
-                          <div className='flex items-center gap-4px'>
-                            <Button
-                              size='mini'
-                              className='model-provider-action-btn !w-28px !h-28px !min-w-28px text-t-secondary hover:text-t-primary'
-                              icon={<Plus size='14' />}
-                              onClick={() => addModelModalCtrl.open({ data: platform })}
+                          {/* 供应商启用开关 / Provider enable switch (read-only for non-owned shared rows) */}
+                          {canManageProvider(platform) && (
+                            <Switch
+                              size='small'
+                              checked={getProviderState(platform).checked}
+                              onChange={() => toggleProviderEnabled(platform)}
                             />
-                            <Popconfirm
-                              title={t('settings.deleteAllModelConfirm')}
-                              onOk={() => removePlatform(platform.id)}
-                            >
+                          )}
+                          {canManageProvider(platform) && (
+                            <div className='flex items-center gap-4px'>
                               <Button
                                 size='mini'
                                 className='model-provider-action-btn !w-28px !h-28px !min-w-28px text-t-secondary hover:text-t-primary'
-                                icon={<Minus size='14' />}
+                                icon={<Plus size='14' />}
+                                onClick={() => addModelModalCtrl.open({ data: platform })}
                               />
-                            </Popconfirm>
-                            <Button
-                              size='mini'
-                              className='model-provider-action-btn !w-28px !h-28px !min-w-28px text-t-secondary hover:text-t-primary'
-                              icon={<Write size='14' />}
-                              onClick={() => editModalCtrl.open({ data: platform })}
-                            />
-                          </div>
+                              <Popconfirm
+                                title={t('settings.deleteAllModelConfirm')}
+                                onOk={() => removePlatform(platform.id)}
+                              >
+                                <Button
+                                  size='mini'
+                                  className='model-provider-action-btn !w-28px !h-28px !min-w-28px text-t-secondary hover:text-t-primary'
+                                  icon={<Minus size='14' />}
+                                />
+                              </Popconfirm>
+                              <Button
+                                size='mini'
+                                className='model-provider-action-btn !w-28px !h-28px !min-w-28px text-t-secondary hover:text-t-primary'
+                                icon={<Write size='14' />}
+                                onClick={() => editModalCtrl.open({ data: platform })}
+                              />
+                            </div>
+                          )}
                         </div>
                       </div>
                     }
@@ -560,7 +597,7 @@ const ModelModalContent: React.FC = () => {
                               <span className='min-w-0 flex-1 truncate text-14px text-t-primary'>{model}</span>
 
                               {/* New API 协议标签（点击循环切换）/ New API protocol badge (click to cycle) */}
-                              {isNewApiProvider && (
+                              {isNewApiProvider && canManageProvider(platform) && (
                                 <Tag
                                   size='small'
                                   color={getProtocolColor(modelProtocol)}
@@ -609,36 +646,43 @@ const ModelModalContent: React.FC = () => {
                               )}
 
                               {/* 模型启用开关 / Model enable switch */}
-                              <Switch
-                                className='shrink-0'
-                                size='small'
-                                checked={isModelEnabled(platform, model)}
-                                onChange={(checked) => toggleModelEnabled(platform, model, checked)}
-                              />
+                              {canManageProvider(platform) && (
+                                <Switch
+                                  className='shrink-0'
+                                  size='small'
+                                  checked={isModelEnabled(platform, model)}
+                                  onChange={(checked) => toggleModelEnabled(platform, model, checked)}
+                                />
+                              )}
                             </div>
 
                             <div className='flex items-center gap-6px shrink-0'>
-                              <Tooltip content={t('settings.configureModel')}>
-                                <Button
-                                  size='mini'
-                                  className='!w-28px !h-28px !min-w-28px !bg-[var(--color-bg-1)] text-t-secondary hover:text-t-primary hover:!bg-[var(--fill-0)]'
-                                  icon={<SettingTwo theme='outline' size='16' />}
-                                  onClick={() => addModelModalCtrl.open({ data: platform, model })}
-                                />
-                              </Tooltip>
+                              {canManageProvider(platform) && (
+                                <Tooltip content={t('settings.configureModel')}>
+                                  <Button
+                                    size='mini'
+                                    className='!w-28px !h-28px !min-w-28px !bg-[var(--color-bg-1)] text-t-secondary hover:text-t-primary hover:!bg-[var(--fill-0)]'
+                                    icon={<SettingTwo theme='outline' size='16' />}
+                                    onClick={() => addModelModalCtrl.open({ data: platform, model })}
+                                  />
+                                </Tooltip>
+                              )}
 
                               {/* 心跳检测按钮 / Health check button */}
-                              <Tooltip content={t('settings.healthCheck')}>
-                                <Button
-                                  size='mini'
-                                  className='!w-28px !h-28px !min-w-28px !bg-[var(--color-bg-1)] text-t-secondary hover:text-t-primary hover:!bg-[var(--fill-0)]'
-                                  icon={<Heartbeat theme='outline' size='16' />}
-                                  loading={healthCheckLoading[`${platform.id}-${model}`]}
-                                  onClick={() => performHealthCheck(platform, model)}
-                                />
-                              </Tooltip>
+                              {canManageProvider(platform) && (
+                                <Tooltip content={t('settings.healthCheck')}>
+                                  <Button
+                                    size='mini'
+                                    className='!w-28px !h-28px !min-w-28px !bg-[var(--color-bg-1)] text-t-secondary hover:text-t-primary hover:!bg-[var(--fill-0)]'
+                                    icon={<Heartbeat theme='outline' size='16' />}
+                                    loading={healthCheckLoading[`${platform.id}-${model}`]}
+                                    onClick={() => performHealthCheck(platform, model)}
+                                  />
+                                </Tooltip>
+                              )}
 
-                              <Popconfirm
+                              {canManageProvider(platform) && (
+                                <Popconfirm
                                 title={t('settings.deleteModelConfirm')}
                                 onOk={() => {
                                   const newModels = platform.models.filter((item: string) => item !== model);
@@ -673,6 +717,7 @@ const ModelModalContent: React.FC = () => {
                                   icon={<DeleteFour theme='outline' size='18' strokeWidth={2} />}
                                 />
                               </Popconfirm>
+                              )}
                             </div>
                           </div>
                           {index < arr.length - 1 && <Divider className='!my-0 !border-[var(--color-border-2)]/70' />}

@@ -1486,5 +1486,8 @@
       "saveFailed": "儲存設定失敗",
       "loadFailed": "載入共享池設定失敗"
     }
-  }
+  },
+  "sharedProviderTag": "共享",
+  "sharedProviderTooltip": "由管理員共享——對你唯讀",
+  "apiKeyKeepExisting": "留空保留目前金鑰；輸入新金鑰將替換它。"
 }
