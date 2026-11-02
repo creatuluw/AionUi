@@ -39,6 +39,7 @@ RUN mkdir -p /opt \
     && rm -rf /tmp/dist \
     && chmod +x /opt/aionui-web/aionui-web
 COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 # IS_SANDBOX=1: Claude Code refuses --dangerously-skip-permissions as root
 #   unless told it runs in a sandbox (this container IS the sandbox).
 # GEMINI_CLI_TRUST_WORKSPACE=true: Gemini CLI refuses fresh per-conversation
