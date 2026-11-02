@@ -5,6 +5,7 @@
  */
 
 import { assistantRuntimeKey, isAionrsAssistant, type Assistant } from '@/common/types/agent/assistantTypes';
+import { isElectronDesktop } from '@/renderer/utils/platform';
 import { configService } from '@/common/config/configService';
 import type { AcpModelInfo } from '../types';
 import type { AgentModeOption } from '@/renderer/utils/model/agentTypes';
@@ -110,6 +111,14 @@ export function pickDefaultAssistantSelectionKey(assistants: Assistant[]): strin
   return preferred?.id ?? null;
 }
 
+// Web deployments pin every user to the built-in Aion CLI assistant: the default
+// picker already prefers it, and persisted per-user choices (plus navigation
+// preselects) are ignored so nobody can drift onto external CLI agents.
+function resolveDefaultSelectionKey(assistants: Assistant[]): string | null {
+  if (!isElectronDesktop()) return pickDefaultAssistantSelectionKey(assistants);
+  return readPersistedGuidAssistantSelectionKey(assistants) ?? pickDefaultAssistantSelectionKey(assistants);
+}
+
 type UseGuidAssistantSelectionOptions = {
   resetAssistant?: boolean;
   preselectAssistantId?: string;
@@ -189,8 +198,7 @@ export const useGuidAssistantSelection = ({
 
     if (resetAssistant) {
       resetHandledRef.current = true;
-      const fallbackId =
-        readPersistedGuidAssistantSelectionKey(assistants) ?? pickDefaultAssistantSelectionKey(assistants);
+      const fallbackId = resolveDefaultSelectionKey(assistants);
       _setSelectedAssistantId(fallbackId);
     }
   }, [assistants, preselectAssistantId, resetAssistant]);
@@ -198,11 +206,16 @@ export const useGuidAssistantSelection = ({
   useEffect(() => {
     if (assistants.length === 0) return;
     if (resetAssistant) return;
+    if (!isElectronDesktop()) {
+      // Pinned web deployment: always the Aion CLI assistant, ignore preselects.
+      if (!selectedAssistantIdState || !assistants.some((assistant) => assistant.id === selectedAssistantIdState)) {
+        _setSelectedAssistantId(resolveDefaultSelectionKey(assistants));
+      }
+      return;
+    }
     if (preselectAssistantId && resolveAssistantSelectionKey(preselectAssistantId, assistants)) return;
     if (!selectedAssistantIdState || !assistants.some((assistant) => assistant.id === selectedAssistantIdState)) {
-      _setSelectedAssistantId(
-        readPersistedGuidAssistantSelectionKey(assistants) ?? pickDefaultAssistantSelectionKey(assistants)
-      );
+      _setSelectedAssistantId(resolveDefaultSelectionKey(assistants));
     }
   }, [assistants, preselectAssistantId, resetAssistant, selectedAssistantIdState]);
 

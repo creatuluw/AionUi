@@ -233,6 +233,9 @@ vi.mock('@/renderer/utils/platform', () => ({
   openExternalUrl: vi.fn(),
   resolveExtensionAssetUrl: vi.fn(),
   resolveBackendAssetUrl: vi.fn((path: string) => path),
+  // Desktop contracts: the assistant-selection area renders and persisted
+  // selection overrides apply. The web-pinned behavior is covered separately.
+  isElectronDesktop: vi.fn(() => true),
 }));
 
 vi.mock('@/renderer/pages/guid/utils/assistantDefaults', () => ({
@@ -346,6 +349,17 @@ describe('GuidPage', () => {
         deletable: false,
       },
     ];
+  });
+
+  it('pins web deployments: no assistant-selection pills above the input', async () => {
+    const platform = await import('@/renderer/utils/platform');
+    vi.mocked(platform.isElectronDesktop).mockReturnValue(false);
+    try {
+      render(<GuidPage />);
+      expect(screen.queryByTestId('assistant-selection-area')).not.toBeInTheDocument();
+    } finally {
+      vi.mocked(platform.isElectronDesktop).mockReturnValue(true);
+    }
   });
 
   it('keeps the existing replace contract for ordinary Guid prefills', () => {
