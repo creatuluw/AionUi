@@ -1414,5 +1414,75 @@
   "crossSessionMessageDesc": "به عامل‌ها اجازه می‌دهد به گفتگوهای دیگر شما پیام بفرستند. با خاموش کردن، منشن @@ در کادر ورودی نیز غیرفعال می‌شود.",
   "crossSessionMessageDisabledBanner": "پیام‌های بین گفتگوها خاموش است، منشن @@ در دسترس نیست.",
   "crossSessionMessageResume": "روشن کردن دوباره",
-  "crossSessionMessageUpdateFailed": "به‌روزرسانی تنظیم پیام‌های بین گفتگوها ناموفق بود"
+  "crossSessionMessageUpdateFailed": "به‌روزرسانی تنظیم پیام‌های بین گفتگوها ناموفق بود",
+  "admin": {
+    "navLabel": "مدیریت",
+    "title": "کنسول مدیریت",
+    "description": "مدیریت کاربران، دعوت‌نامه‌ها و استخر مشترک",
+    "tabs": {
+      "users": "کاربران",
+      "invites": "دعوت‌نامه‌ها",
+      "pool": "تنظیمات استخر"
+    },
+    "users": {
+      "username": "نام کاربری",
+      "role": "نقش",
+      "status": "وضعیت",
+      "actions": "عملیات",
+      "active": "فعال",
+      "disabled": "غیرفعال",
+      "roleAdmin": "مدیر",
+      "roleMember": "عضو",
+      "provision": "افزودن کاربر",
+      "provisionTitle": "ایجاد کاربر",
+      "provisionSuccess": "کاربر ایجاد شد",
+      "provisionFailed": "ایجاد کاربر ناموفق بود",
+      "newPassword": "رمز عبور",
+      "setPassword": "تنظیم رمز عبور",
+      "setPasswordTitle": "تنظیم رمز عبور برای {{name}}",
+      "passwordChanged": "رمز عبور به‌روزرسانی شد",
+      "disable": "غیرفعال‌سازی",
+      "enable": "فعال‌سازی",
+      "disableConfirm": "{{name}} غیرفعال شود؟ امکان ورود نخواهد داشت.",
+      "cannotDisableSelf": "نمی‌توانید حساب خودتان را غیرفعال کنید",
+      "cannotChangeSelf": "نمی‌توانید نقش خودتان را تغییر دهید",
+      "roleChanged": "نقش به‌روزرسانی شد",
+      "actionFailed": "عملیات ناموفق بود",
+      "loadFailed": "بارگذاری کاربران ناموفق بود"
+    },
+    "invites": {
+      "hint": "کد دعوت فقط یک بار هنگام ایجاد نمایش داده می‌شود — قبل از بستن آن را کپی کنید.",
+      "create": "ایجاد دعوت‌نامه",
+      "createTitle": "ایجاد دعوت‌نامه",
+      "createFailed": "ایجاد دعوت‌نامه ناموفق بود",
+      "expiryHours": "انقضا در (ساعت)",
+      "expiryHint": "برای بدون انقضا خالی بگذارید",
+      "code": "کد",
+      "status": {
+        "active": "فعال",
+        "used": "استفاده‌شده",
+        "expired": "منقضی‌شده",
+        "revoked": "لغوشده"
+      },
+      "codeTitle": "کد دعوت",
+      "codeWarning": "همین حالا این کد را کپی کنید — دوباره نمایش داده نمی‌شود.",
+      "createdAt": "ایجاد",
+      "expiresAt": "انقضا",
+      "usedAt": "استفاده",
+      "revoke": "لغو",
+      "revokeConfirm": "این دعوت‌نامه لغو شود؟ دیگر قابل استفاده نخواهد بود.",
+      "revokeFailed": "لغو دعوت‌نامه ناموفق بود",
+      "loadFailed": "بارگذاری دعوت‌نامه‌ها ناموفق بود",
+      "statusLabel": "وضعیت"
+    },
+    "pool": {
+      "sharedEnabled": "سرویس کلید اشتراکی",
+      "sharedEnabledDesc": "اعضایی که کلید API ندارند بتوانند از استخر مشترک استفاده کنند",
+      "dailyCap": "سقف روزانه درخواست‌ها",
+      "dailyCapDesc": "حداکثر تعداد درخواست‌های استخر مشترک در روز (۰ = نامحدود)",
+      "saved": "تنظیمات ذخیره شد",
+      "saveFailed": "ذخیره تنظیمات ناموفق بود",
+      "loadFailed": "بارگذاری تنظیمات استخر ناموفق بود"
+    }
+  }
 }

@@ -523,7 +523,21 @@ export interface IProvider {
   platform: string;
   name: string;
   base_url: string;
-  api_key: string;
+  /**
+   * Plaintext API key. Present in local/desktop mode; the multi-user backend
+   * REPLACES it in list responses with `masked_key` + `has_key` (secrets never
+   * round-trip to clients that don't own the provider). Only include this in
+   * create/update payloads when the user actually entered a new key.
+   */
+  api_key?: string;
+  /** Backend-masked key (e.g. "sk-***abc"), shown when the key is not exposed. */
+  masked_key?: string;
+  /** True when the provider has a stored key even though `api_key` is withheld. */
+  has_key?: boolean;
+  /** Multi-user visibility: a `shared` provider is usable by all members. */
+  visibility?: 'private' | 'shared';
+  /** False when the current user does NOT own this provider (read-only row). */
+  owned?: boolean;
   models: string[];
   /**
    * 模型能力标签列表。打了标签就是支持，没打就是不支持

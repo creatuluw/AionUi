@@ -25,6 +25,8 @@ import {
   wsMappedEmitter,
   stubEmitter,
   httpRequest,
+  resolveCoreCsrfToken,
+  CSRF_COOKIE_NAME,
 } from '@/common/adapter/httpBridge';
 
 type FakeSocketEventMap = {
@@ -199,6 +201,141 @@ describe('httpBridge', () => {
       await httpGet<{ ok: boolean }, { id: string }>((p) => `/api/${p.id}`).invoke({ id: 'abc' });
 
       expect(fetchSpy.mock.calls[0][0]).toContain('/api/abc');
+    });
+  });
+
+  describe('CSRF double-submit (aionui-csrf-token cookie → x-csrf-token header)', () => {
+    it('resolveCoreCsrfToken returns empty without document (node/main process)', () => {
+      expect(resolveCoreCsrfToken()).toBe('');
+    });
+
+    it('resolveCoreCsrfToken reads the csrf cookie from document.cookie', () => {
+      vi.stubGlobal('document', { cookie: 'other=1; aionui-csrf-token=tok-abc; session=x' });
+
+      expect(resolveCoreCsrfToken()).toBe('tok-abc');
+    });
+
+    it('resolveCoreCsrfToken returns empty when the cookie is absent', () => {
+      vi.stubGlobal('document', { cookie: 'other=1; session=x' });
+
+      expect(resolveCoreCsrfToken()).toBe('');
+    });
+
+    it('resolveCoreCsrfToken tolerates malformed escaping', () => {
+      vi.stubGlobal('document', { cookie: `${CSRF_COOKIE_NAME}=tok%ZZbroken` });
+
+      expect(resolveCoreCsrfToken()).toBe('tok%ZZbroken');
+    });
+
+    it('attaches x-csrf-token on POST when the cookie exists', async () => {
+      vi.stubGlobal('document', { cookie: 'aionui-csrf-token=tok-abc' });
+      const fetchSpy = vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ data: { ok: true } }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      );
+      vi.stubGlobal('fetch', fetchSpy);
+      vi.spyOn(console, 'debug').mockImplementation(() => {});
+
+      await httpPost('/api/x').invoke({ k: 'v' });
+
+      expect(fetchSpy.mock.calls[0][1]?.headers).toEqual({
+        'Content-Type': 'application/json',
+        'x-csrf-token': 'tok-abc',
+      });
+    });
+
+    it('attaches x-csrf-token on PUT/PATCH/DELETE too', async () => {
+      vi.stubGlobal('document', { cookie: 'aionui-csrf-token=tok-abc' });
+      const okResponse = () =>
+        new Response(JSON.stringify({ data: { ok: true } }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      const fetchSpy = vi.fn().mockImplementation(() => Promise.resolve(okResponse()));
+      vi.stubGlobal('fetch', fetchSpy);
+      vi.spyOn(console, 'debug').mockImplementation(() => {});
+
+      await httpPut('/api/x').invoke({ k: 'v' });
+      await httpPatch('/api/x').invoke({ k: 'v' });
+      await httpDelete('/api/x').invoke({ id: '1' });
+
+      expect(fetchSpy.mock.calls[0][1]?.headers['x-csrf-token']).toBe('tok-abc');
+      expect(fetchSpy.mock.calls[1][1]?.headers['x-csrf-token']).toBe('tok-abc');
+      expect(fetchSpy.mock.calls[2][1]?.headers['x-csrf-token']).toBe('tok-abc');
+    });
+
+    it('never attaches the header on GET', async () => {
+      vi.stubGlobal('document', { cookie: 'aionui-csrf-token=tok-abc' });
+      const fetchSpy = vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ data: { ok: true } }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      );
+      vi.stubGlobal('fetch', fetchSpy);
+      vi.spyOn(console, 'debug').mockImplementation(() => {});
+
+      await httpGet('/api/x').invoke();
+
+      expect(fetchSpy.mock.calls[0][1]?.headers).toEqual({});
+    });
+
+    it('sends no header when the cookie is missing (desktop local mode)', async () => {
+      vi.stubGlobal('document', { cookie: 'unrelated=1' });
+      const fetchSpy = vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ data: { ok: true } }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      );
+      vi.stubGlobal('fetch', fetchSpy);
+      vi.spyOn(console, 'debug').mockImplementation(() => {});
+
+      await httpPost('/api/x').invoke({ k: 'v' });
+
+      expect(fetchSpy.mock.calls[0][1]?.headers).toEqual({ 'Content-Type': 'application/json' });
+    });
+
+    it('re-resolves the token after a 401 → refresh → replay', async () => {
+      let csrfCookie = `${CSRF_COOKIE_NAME}=tok-old`;
+      vi.stubGlobal('document', {
+        get cookie() {
+          return csrfCookie;
+        },
+      });
+      // WebUI browser mode so refreshSession() actually performs POST /api/auth/refresh.
+      vi.stubGlobal('window', {});
+
+      let call = 0;
+      let replayHeader: string | undefined;
+      const fetchSpy = vi.fn().mockImplementation((url: string, init?: { headers?: Record<string, string> }) => {
+        const u = String(url);
+        if (u.includes('/api/auth/refresh')) {
+          // The backend mints a FRESH csrf cookie as part of the refresh.
+          csrfCookie = `${CSRF_COOKIE_NAME}=tok-new`;
+          return Promise.resolve(new Response('', { status: 200 }));
+        }
+        call++;
+        if (call === 1) {
+          return Promise.resolve(new Response('{}', { status: 401 }));
+        }
+        replayHeader = init?.headers?.['x-csrf-token'];
+        return Promise.resolve(
+          new Response(JSON.stringify({ data: { ok: true } }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          })
+        );
+      });
+      vi.stubGlobal('fetch', fetchSpy);
+      vi.spyOn(console, 'debug').mockImplementation(() => {});
+
+      await httpRequest('POST', '/api/things', { a: 1 });
+
+      // The replay (call 2 after the original + refresh) must echo the NEW token.
+      expect(replayHeader).toBe('tok-new');
     });
   });
 

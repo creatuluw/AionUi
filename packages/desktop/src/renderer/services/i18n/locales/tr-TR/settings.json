@@ -1414,5 +1414,75 @@
   "crossSessionMessageDesc": "Aracıların diğer sohbetlerinize mesaj göndermesine izin verir. Kapatmak giriş alanındaki @@ sohbet etiketini de devre dışı bırakır.",
   "crossSessionMessageDisabledBanner": "Sohbetler arası mesajlar kapalı, @@ sohbet etiketi kullanılamıyor.",
   "crossSessionMessageResume": "Yeniden aç",
-  "crossSessionMessageUpdateFailed": "Sohbetler arası mesaj ayarı güncellenemedi"
+  "crossSessionMessageUpdateFailed": "Sohbetler arası mesaj ayarı güncellenemedi",
+  "admin": {
+    "navLabel": "Yönetim",
+    "title": "Yönetim konsolu",
+    "description": "Kullanıcıları, davetleri ve paylaşılan havuzu yönetin",
+    "tabs": {
+      "users": "Kullanıcılar",
+      "invites": "Davetler",
+      "pool": "Havuz ayarları"
+    },
+    "users": {
+      "username": "Kullanıcı adı",
+      "role": "Rol",
+      "status": "Durum",
+      "actions": "İşlemler",
+      "active": "Etkin",
+      "disabled": "Devre dışı",
+      "roleAdmin": "Yönetici",
+      "roleMember": "Üye",
+      "provision": "Kullanıcı ekle",
+      "provisionTitle": "Kullanıcı oluştur",
+      "provisionSuccess": "Kullanıcı oluşturuldu",
+      "provisionFailed": "Kullanıcı oluşturulamadı",
+      "newPassword": "Şifre",
+      "setPassword": "Şifre belirle",
+      "setPasswordTitle": "{{name}} için şifre belirle",
+      "passwordChanged": "Şifre güncellendi",
+      "disable": "Devre dışı bırak",
+      "enable": "Etkinleştir",
+      "disableConfirm": "{{name}} devre dışı bıranılsın mı? Giriş yapamayacak.",
+      "cannotDisableSelf": "Kendi hesabınızı devre dışı bırakamazsınız",
+      "cannotChangeSelf": "Kendi rolünüzü değiştiremezsiniz",
+      "roleChanged": "Rol güncellendi",
+      "actionFailed": "İşlem başarısız oldu",
+      "loadFailed": "Kullanıcılar yüklenemedi"
+    },
+    "invites": {
+      "hint": "Davet kodu yalnızca oluşturulduğunda bir kez gösterilir — kapatmadan önce kopyalayın.",
+      "create": "Davet oluştur",
+      "createTitle": "Davet oluştur",
+      "createFailed": "Davet oluşturulamadı",
+      "expiryHours": "Geçerlilik süresi (saat)",
+      "expiryHint": "Süresiz için boş bırakın",
+      "code": "Kod",
+      "status": {
+        "active": "Etkin",
+        "used": "Kullanıldı",
+        "expired": "Süresi doldu",
+        "revoked": "İptal edildi"
+      },
+      "codeTitle": "Davet kodu",
+      "codeWarning": "Bu kodu şimdi kopyalayın — bir daha gösterilmeyecek.",
+      "createdAt": "Oluşturulma",
+      "expiresAt": "Son geçerlilik",
+      "usedAt": "Kullanılma",
+      "revoke": "İptal et",
+      "revokeConfirm": "Bu davet iptal edilsin mi? Bir daha kullanılamaz.",
+      "revokeFailed": "Davet iptal edilemedi",
+      "loadFailed": "Davetler yüklenemedi",
+      "statusLabel": "Durum"
+    },
+    "pool": {
+      "sharedEnabled": "Paylaşılan anahtar hizmeti",
+      "sharedEnabledDesc": "Kendi API anahtarı olmayan üyeler paylaşılan sağlayıcı havuzunu kullanabilir",
+      "dailyCap": "Günlük istek sınırı",
+      "dailyCapDesc": "Paylaşılan havuz için günlük en fazla istek sayısı (0 = sınırsız)",
+      "saved": "Ayarlar kaydedildi",
+      "saveFailed": "Ayarlar kaydedilemedi",
+      "loadFailed": "Havuz ayarları yüklenemedi"
+    }
+  }
 }

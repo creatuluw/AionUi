@@ -1414,5 +1414,75 @@
   "crossSessionMessageDesc": "Erlaubt Agenten, Nachrichten an Ihre anderen Unterhaltungen zu senden. Beim Ausschalten wird auch die @@-Erwähnung im Eingabefeld deaktiviert.",
   "crossSessionMessageDisabledBanner": "Nachrichten zwischen Unterhaltungen sind aus, die @@-Erwähnung ist nicht verfügbar.",
   "crossSessionMessageResume": "Wieder einschalten",
-  "crossSessionMessageUpdateFailed": "Einstellung konnte nicht aktualisiert werden"
+  "crossSessionMessageUpdateFailed": "Einstellung konnte nicht aktualisiert werden",
+  "admin": {
+    "navLabel": "Admin",
+    "title": "Admin-Konsole",
+    "description": "Benutzer, Einladungen und den gemeinsamen Pool verwalten",
+    "tabs": {
+      "users": "Benutzer",
+      "invites": "Einladungen",
+      "pool": "Pool-Einstellungen"
+    },
+    "users": {
+      "username": "Benutzername",
+      "role": "Rolle",
+      "status": "Status",
+      "actions": "Aktionen",
+      "active": "Aktiv",
+      "disabled": "Deaktiviert",
+      "roleAdmin": "Admin",
+      "roleMember": "Mitglied",
+      "provision": "Benutzer hinzufügen",
+      "provisionTitle": "Benutzer anlegen",
+      "provisionSuccess": "Benutzer erstellt",
+      "provisionFailed": "Benutzer konnte nicht erstellt werden",
+      "newPassword": "Passwort",
+      "setPassword": "Passwort festlegen",
+      "setPasswordTitle": "Passwort für {{name}} festlegen",
+      "passwordChanged": "Passwort aktualisiert",
+      "disable": "Deaktivieren",
+      "enable": "Aktivieren",
+      "disableConfirm": "{{name}} deaktivieren? Eine Anmeldung ist dann nicht mehr möglich.",
+      "cannotDisableSelf": "Du kannst dein eigenes Konto nicht deaktivieren",
+      "cannotChangeSelf": "Du kannst deine eigene Rolle nicht ändern",
+      "roleChanged": "Rolle aktualisiert",
+      "actionFailed": "Aktion fehlgeschlagen",
+      "loadFailed": "Benutzer konnten nicht geladen werden"
+    },
+    "invites": {
+      "hint": "Der Einladungscode wird nur einmal beim Erstellen angezeigt — kopiere ihn vor dem Schließen.",
+      "create": "Einladung erstellen",
+      "createTitle": "Einladung erstellen",
+      "createFailed": "Einladung konnte nicht erstellt werden",
+      "expiryHours": "Läuft ab in (Stunden)",
+      "expiryHint": "Leer lassen für kein Ablaufdatum",
+      "code": "Code",
+      "status": {
+        "active": "Aktiv",
+        "used": "Benutzt",
+        "expired": "Abgelaufen",
+        "revoked": "Widerrufen"
+      },
+      "codeTitle": "Einladungscode",
+      "codeWarning": "Kopiere diesen Code jetzt — er wird nicht erneut angezeigt.",
+      "createdAt": "Erstellt",
+      "expiresAt": "Läuft ab",
+      "usedAt": "Benutzt",
+      "revoke": "Widerrufen",
+      "revokeConfirm": "Diese Einladung widerrufen? Sie kann nicht mehr verwendet werden.",
+      "revokeFailed": "Einladung konnte nicht widerrufen werden",
+      "loadFailed": "Einladungen konnten nicht geladen werden",
+      "statusLabel": "Status"
+    },
+    "pool": {
+      "sharedEnabled": "Gemeinsamer Schlüsseldienst",
+      "sharedEnabledDesc": "Mitgliedern ohne eigene API-Schlüssel die Nutzung des gemeinsamen Anbieter-Pools erlauben",
+      "dailyCap": "Tägliches Anfragelimit",
+      "dailyCapDesc": "Maximale Anzahl an Pool-Anfragen pro Tag (0 = unbegrenzt)",
+      "saved": "Einstellungen gespeichert",
+      "saveFailed": "Einstellungen konnten nicht gespeichert werden",
+      "loadFailed": "Pool-Einstellungen konnten nicht geladen werden"
+    }
+  }
 }

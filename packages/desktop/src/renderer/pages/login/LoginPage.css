@@ -371,6 +371,22 @@ body.login-page-active {
   color: #ddd;
 }
 
+.login-page__signup-link {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.login-page__signup-link a {
+  color: #596590;
+  text-decoration: none;
+}
+
+.login-page__signup-link a:hover {
+  text-decoration: underline;
+  color: #414a75;
+}
+
 @media (max-width: 600px) {
   .login-page__card {
     margin: 20px;

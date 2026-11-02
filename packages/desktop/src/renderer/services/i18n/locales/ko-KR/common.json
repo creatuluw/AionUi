@@ -202,5 +202,7 @@
   },
   "selectedCount": "선택됨 {{count}}",
   "selectedSkills": "선택된 스킬",
-  "aiAssistant": "AI 어시스턴트"
+  "aiAssistant": "AI 어시스턴트",
+  "actions": "작업",
+  "copied": "복사됨"
 }

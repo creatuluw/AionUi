@@ -22,5 +22,31 @@
     "networkError": "Verbindung fehlgeschlagen, bitte erneut versuchen",
     "serverError": "Serverfehler, bitte später erneut versuchen",
     "unknown": "Anmeldung fehlgeschlagen, bitte erneut versuchen"
+  },
+  "haveInvite": "Du hast einen Einladungscode? Registrieren",
+  "register": {
+    "subtitle": "Erstelle dein Konto mit einem Einladungscode",
+    "inviteCode": "Einladungscode",
+    "inviteCodePlaceholder": "Einladungscode eingeben",
+    "confirmPassword": "Passwort bestätigen",
+    "submit": "Konto erstellen",
+    "submitting": "Konto wird erstellt...",
+    "success": "Konto erstellt! Du wirst angemeldet...",
+    "backToLogin": "Du hast bereits ein Konto? Anmelden",
+    "errors": {
+      "codeRequired": "Bitte gib deinen Einladungscode ein",
+      "usernameRequired": "Bitte gib einen Benutzernamen ein",
+      "passwordRequired": "Bitte gib ein Passwort ein",
+      "confirmRequired": "Bitte bestätige dein Passwort",
+      "passwordMismatch": "Die Passwörter stimmen nicht überein",
+      "invalidCode": "Ungültiger Einladungscode",
+      "expiredCode": "Dieser Einladungscode ist abgelaufen",
+      "usernameTaken": "Dieser Benutzername ist bereits vergeben",
+      "weakPassword": "Das Passwort erfüllt die Anforderungen nicht",
+      "rateLimited": "Zu viele Versuche, bitte später erneut versuchen",
+      "networkError": "Verbindung fehlgeschlagen, bitte erneut versuchen",
+      "serverError": "Serverfehler, bitte später erneut versuchen",
+      "unknown": "Registrierung fehlgeschlagen, bitte erneut versuchen"
+    }
   }
 }

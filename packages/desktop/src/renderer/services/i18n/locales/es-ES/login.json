@@ -22,5 +22,31 @@
     "networkError": "Error de conexión, intenta de nuevo",
     "serverError": "Error del servidor, intenta más tarde",
     "unknown": "Error al iniciar sesión, intenta de nuevo"
+  },
+  "haveInvite": "¿Tienes un código de invitación? Regístrate",
+  "register": {
+    "subtitle": "Crea tu cuenta con un código de invitación",
+    "inviteCode": "Código de invitación",
+    "inviteCodePlaceholder": "Introduce tu código de invitación",
+    "confirmPassword": "Confirmar contraseña",
+    "submit": "Crear cuenta",
+    "submitting": "Creando cuenta...",
+    "success": "¡Cuenta creada! Iniciando sesión...",
+    "backToLogin": "¿Ya tienes una cuenta? Inicia sesión",
+    "errors": {
+      "codeRequired": "Introduce tu código de invitación",
+      "usernameRequired": "Introduce un nombre de usuario",
+      "passwordRequired": "Introduce una contraseña",
+      "confirmRequired": "Confirma tu contraseña",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "invalidCode": "Código de invitación no válido",
+      "expiredCode": "Este código de invitación ha caducado",
+      "usernameTaken": "Este nombre de usuario ya está en uso",
+      "weakPassword": "La contraseña no cumple los requisitos",
+      "rateLimited": "Demasiados intentos, inténtalo más tarde",
+      "networkError": "Error de conexión, inténtalo de nuevo",
+      "serverError": "Error del servidor, inténtalo más tarde",
+      "unknown": "No se pudo completar el registro, inténtalo de nuevo"
+    }
   }
 }

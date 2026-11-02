@@ -1417,5 +1417,75 @@
   "crossSessionMessageDesc": "Permite que agentes enviem mensagens para suas outras conversas. Desativar também desliga a menção @@ na caixa de entrada.",
   "crossSessionMessageDisabledBanner": "As mensagens entre conversas estão desativadas, a menção @@ não está disponível.",
   "crossSessionMessageResume": "Ativar novamente",
-  "crossSessionMessageUpdateFailed": "Falha ao atualizar a configuração de mensagens entre conversas"
+  "crossSessionMessageUpdateFailed": "Falha ao atualizar a configuração de mensagens entre conversas",
+  "admin": {
+    "navLabel": "Administração",
+    "title": "Console do administrador",
+    "description": "Gerencie usuários, convites e o pool compartilhado",
+    "tabs": {
+      "users": "Usuários",
+      "invites": "Convites",
+      "pool": "Configurações do pool"
+    },
+    "users": {
+      "username": "Nome de usuário",
+      "role": "Função",
+      "status": "Status",
+      "actions": "Ações",
+      "active": "Ativo",
+      "disabled": "Desativado",
+      "roleAdmin": "Administrador",
+      "roleMember": "Membro",
+      "provision": "Adicionar usuário",
+      "provisionTitle": "Criar usuário",
+      "provisionSuccess": "Usuário criado",
+      "provisionFailed": "Falha ao criar usuário",
+      "newPassword": "Senha",
+      "setPassword": "Definir senha",
+      "setPasswordTitle": "Definir senha para {{name}}",
+      "passwordChanged": "Senha atualizada",
+      "disable": "Desativar",
+      "enable": "Ativar",
+      "disableConfirm": "Desativar {{name}}? Não será possível entrar.",
+      "cannotDisableSelf": "Você não pode desativar sua própria conta",
+      "cannotChangeSelf": "Você não pode alterar sua própria função",
+      "roleChanged": "Função atualizada",
+      "actionFailed": "Falha na ação",
+      "loadFailed": "Falha ao carregar usuários"
+    },
+    "invites": {
+      "hint": "O código do convite é mostrado apenas uma vez ao criar — copie-o antes de fechar.",
+      "create": "Criar convite",
+      "createTitle": "Criar convite",
+      "createFailed": "Falha ao criar convite",
+      "expiryHours": "Expira em (horas)",
+      "expiryHint": "Deixe vazio para não expirar",
+      "code": "Código",
+      "status": {
+        "active": "Ativo",
+        "used": "Usado",
+        "expired": "Expirado",
+        "revoked": "Revogado"
+      },
+      "codeTitle": "Código do convite",
+      "codeWarning": "Copie este código agora — ele não será mostrado novamente.",
+      "createdAt": "Criado em",
+      "expiresAt": "Expira em",
+      "usedAt": "Usado em",
+      "revoke": "Revogar",
+      "revokeConfirm": "Revogar este convite? Ele não poderá mais ser usado.",
+      "revokeFailed": "Falha ao revogar convite",
+      "loadFailed": "Falha ao carregar convites",
+      "statusLabel": "Status"
+    },
+    "pool": {
+      "sharedEnabled": "Serviço de chave compartilhada",
+      "sharedEnabledDesc": "Permitir que membros sem suas próprias chaves de API usem o pool compartilhado",
+      "dailyCap": "Limite diário de solicitações",
+      "dailyCapDesc": "Número máximo de solicitações ao pool por dia (0 = ilimitado)",
+      "saved": "Configurações salvas",
+      "saveFailed": "Falha ao salvar configurações",
+      "loadFailed": "Falha ao carregar as configurações do pool"
+    }
+  }
 }

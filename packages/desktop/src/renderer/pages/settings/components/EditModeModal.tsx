@@ -41,6 +41,11 @@ const EditModeModal = ModalHOC<{ data?: IProvider; onChange(data: IProvider): vo
     // never mutates the selection — the user keeps whatever they picked.
     const [modelsMissingAfterRefresh, setModelsMissingAfterRefresh] = useState<string[]>([]);
 
+    // Multi-user mode: the plaintext key is withheld and the row only carries
+    // has_key/masked_key. The key is then optional — leave empty to keep the
+    // stored one; a non-empty value replaces it.
+    const hasStoredKey = Boolean(data?.has_key) || Boolean(data?.api_key);
+
     // For Bedrock, don't pass bedrock_config to avoid auto-refresh on input changes
     // We'll build it dynamically in onFocus
     // When is_full_url, pass empty base_url to prevent auto-fetch with the full endpoint URL
@@ -139,12 +144,20 @@ const EditModeModal = ModalHOC<{ data?: IProvider; onChange(data: IProvider): vo
         onOk={async () => {
           try {
             const values = await form.validate();
+            // Strip the key from the spread — it is re-added below ONLY when the
+            // user entered a new one. Omitting it keeps the stored (possibly
+            // withheld) key intact instead of clobbering it with ''.
+            const { api_key: enteredApiKey, ...restValues } = values;
             const updatedProvider: IProvider = {
               ...data,
-              ...values,
+              ...restValues,
               // Ensure models is always an array
               models: Array.isArray(values.model) ? values.model : [values.model],
             };
+
+            if (enteredApiKey && enteredApiKey.trim()) {
+              updatedProvider.api_key = enteredApiKey;
+            }
 
             // Add Bedrock configuration if platform is Bedrock
             if (isBedrock) {
@@ -217,12 +230,21 @@ const EditModeModal = ModalHOC<{ data?: IProvider; onChange(data: IProvider): vo
             <Form.Item
               hidden={isBedrock}
               label={t('settings.apiKey')}
-              required={!isBedrock}
-              rules={[{ required: !isBedrock }]}
+              required={!isBedrock && !hasStoredKey}
+              rules={[{ required: !isBedrock && !hasStoredKey }]}
               field={'api_key'}
-              extra={<div className='text-11px text-t-secondary mt-2'>💡 {t('settings.multiApiKeyEditTip')}</div>}
+              extra={
+                <div className='text-11px text-t-secondary mt-2'>
+                  {hasStoredKey
+                    ? `💡 ${t('settings.apiKeyKeepExisting')}`
+                    : `💡 ${t('settings.multiApiKeyEditTip')}`}
+                </div>
+              }
             >
-              <Input.TextArea rows={4} placeholder={t('settings.apiKeyPlaceholder')} />
+              <Input.TextArea
+                rows={4}
+                placeholder={data?.api_key ? t('settings.apiKeyPlaceholder') : (data?.masked_key || t('settings.apiKeyPlaceholder'))}
+              />
             </Form.Item>
 
             {/* AWS Bedrock Authentication Method */}

@@ -1414,5 +1414,78 @@
   "crossSessionMessageDesc": "Let agents send messages to your other conversations. Turning this off also disables the @@ conversation mention in the input box.",
   "crossSessionMessageDisabledBanner": "Cross-conversation messages are off, so the @@ conversation mention is unavailable.",
   "crossSessionMessageResume": "Turn back on",
-  "crossSessionMessageUpdateFailed": "Failed to update the cross-conversation message setting"
+  "crossSessionMessageUpdateFailed": "Failed to update the cross-conversation message setting",
+  "admin": {
+    "navLabel": "Admin",
+    "title": "Admin console",
+    "description": "Manage users, invites, and the shared pool",
+    "tabs": {
+      "users": "Users",
+      "invites": "Invites",
+      "pool": "Pool settings"
+    },
+    "users": {
+      "username": "Username",
+      "role": "Role",
+      "status": "Status",
+      "actions": "Actions",
+      "active": "Active",
+      "disabled": "Disabled",
+      "roleAdmin": "Admin",
+      "roleMember": "Member",
+      "provision": "Add user",
+      "provisionTitle": "Provision user",
+      "provisionSuccess": "User created",
+      "provisionFailed": "Failed to create user",
+      "newPassword": "Password",
+      "setPassword": "Set password",
+      "setPasswordTitle": "Set password for {{name}}",
+      "passwordChanged": "Password updated",
+      "disable": "Disable",
+      "enable": "Enable",
+      "disableConfirm": "Disable {{name}}? They will not be able to sign in.",
+      "cannotDisableSelf": "You cannot disable your own account",
+      "cannotChangeSelf": "You cannot change your own role",
+      "roleChanged": "Role updated",
+      "actionFailed": "Action failed",
+      "loadFailed": "Failed to load users"
+    },
+    "invites": {
+      "hint": "The invite code is shown only once when created — copy it before closing.",
+      "create": "Create invite",
+      "createTitle": "Create invite",
+      "createFailed": "Failed to create invite",
+      "expiryHours": "Expires in (hours)",
+      "expiryHint": "Leave empty for no expiry",
+      "code": "Code",
+      "status": {
+        "active": "Active",
+        "used": "Used",
+        "expired": "Expired",
+        "revoked": "Revoked"
+      },
+      "codeTitle": "Invite code",
+      "codeWarning": "Copy this code now — it will not be shown again.",
+      "createdAt": "Created",
+      "expiresAt": "Expires",
+      "usedAt": "Used",
+      "revoke": "Revoke",
+      "revokeConfirm": "Revoke this invite? It can no longer be used.",
+      "revokeFailed": "Failed to revoke invite",
+      "loadFailed": "Failed to load invites",
+      "statusLabel": "Status"
+    },
+    "pool": {
+      "sharedEnabled": "Shared key service",
+      "sharedEnabledDesc": "Let members without their own API keys use the shared provider pool",
+      "dailyCap": "Daily request cap",
+      "dailyCapDesc": "Maximum number of shared-pool requests per day (0 = unlimited)",
+      "saved": "Settings saved",
+      "saveFailed": "Failed to save settings",
+      "loadFailed": "Failed to load pool settings"
+    }
+  },
+  "sharedProviderTag": "Shared",
+  "sharedProviderTooltip": "Shared by an admin — read-only for you",
+  "apiKeyKeepExisting": "Leave empty to keep the current key; enter a new key to replace it."
 }

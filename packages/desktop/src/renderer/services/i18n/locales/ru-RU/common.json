@@ -204,5 +204,7 @@
   },
   "selectedCount": "Выбрано {{count}}",
   "selectedSkills": "Выбранные навыки",
-  "aiAssistant": "ИИ-ассистент"
+  "aiAssistant": "ИИ-ассистент",
+  "actions": "Действия",
+  "copied": "Скопировано"
 }

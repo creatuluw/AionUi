@@ -1416,5 +1416,75 @@
   "crossSessionMessageDesc": "에이전트가 다른 대화로 메시지를 보낼 수 있게 합니다. 끄면 입력창의 @@ 대화 멘션도 비활성화됩니다.",
   "crossSessionMessageDisabledBanner": "대화 간 메시지가 꺼져 있어 입력창의 @@ 대화 멘션을 사용할 수 없습니다.",
   "crossSessionMessageResume": "다시 켜기",
-  "crossSessionMessageUpdateFailed": "대화 간 메시지 설정 업데이트에 실패했습니다"
+  "crossSessionMessageUpdateFailed": "대화 간 메시지 설정 업데이트에 실패했습니다",
+  "admin": {
+    "navLabel": "관리",
+    "title": "관리 콘솔",
+    "description": "사용자, 초대 코드, 공유 풀을 관리합니다",
+    "tabs": {
+      "users": "사용자",
+      "invites": "초대 코드",
+      "pool": "공유 풀 설정"
+    },
+    "users": {
+      "username": "사용자 이름",
+      "role": "역할",
+      "status": "상태",
+      "actions": "작업",
+      "active": "활성",
+      "disabled": "비활성화됨",
+      "roleAdmin": "관리자",
+      "roleMember": "멤버",
+      "provision": "사용자 추가",
+      "provisionTitle": "사용자 만들기",
+      "provisionSuccess": "사용자가 생성되었습니다",
+      "provisionFailed": "사용자 생성에 실패했습니다",
+      "newPassword": "비밀번호",
+      "setPassword": "비밀번호 설정",
+      "setPasswordTitle": "{{name}}님의 비밀번호 설정",
+      "passwordChanged": "비밀번호가 업데이트되었습니다",
+      "disable": "비활성화",
+      "enable": "활성화",
+      "disableConfirm": "{{name}}님을 비활성화하시겠습니까? 로그인할 수 없게 됩니다.",
+      "cannotDisableSelf": "자신의 계정은 비활성화할 수 없습니다",
+      "cannotChangeSelf": "자신의 역할은 변경할 수 없습니다",
+      "roleChanged": "역할이 업데이트되었습니다",
+      "actionFailed": "작업에 실패했습니다",
+      "loadFailed": "사용자를 불러오지 못했습니다"
+    },
+    "invites": {
+      "hint": "초대 코드는 생성 시 한 번만 표시됩니다. 닫기 전에 복사하세요.",
+      "create": "초대 코드 만들기",
+      "createTitle": "초대 코드 만들기",
+      "createFailed": "초대 코드 생성에 실패했습니다",
+      "expiryHours": "만료 기간(시간)",
+      "expiryHint": "비워두면 만료되지 않습니다",
+      "code": "코드",
+      "status": {
+        "active": "활성",
+        "used": "사용됨",
+        "expired": "만료됨",
+        "revoked": "취소됨"
+      },
+      "codeTitle": "초대 코드",
+      "codeWarning": "지금 이 코드를 복사하세요. 다시 표시되지 않습니다.",
+      "createdAt": "생성일",
+      "expiresAt": "만료일",
+      "usedAt": "사용일",
+      "revoke": "취소",
+      "revokeConfirm": "이 초대 코드를 취소하시겠습니까? 더 이상 사용할 수 없습니다.",
+      "revokeFailed": "초대 코드 취소에 실패했습니다",
+      "loadFailed": "초대 코드를 불러오지 못했습니다",
+      "statusLabel": "상태"
+    },
+    "pool": {
+      "sharedEnabled": "공유 키 서비스",
+      "sharedEnabledDesc": "API 키가 없는 멤버가 공유 공급자 풀을 사용할 수 있도록 합니다",
+      "dailyCap": "일일 요청 한도",
+      "dailyCapDesc": "공유 풀의 하루 최대 요청 수 (0 = 무제한)",
+      "saved": "설정이 저장되었습니다",
+      "saveFailed": "설정 저장에 실패했습니다",
+      "loadFailed": "공유 풀 설정을 불러오지 못했습니다"
+    }
+  }
 }

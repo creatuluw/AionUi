@@ -22,5 +22,31 @@
     "networkError": "Falha na conexão, por favor tente novamente",
     "serverError": "Erro no servidor, por favor tente novamente mais tarde",
     "unknown": "O login falhou, por favor tente novamente"
+  },
+  "haveInvite": "Tem um código de convite? Cadastre-se",
+  "register": {
+    "subtitle": "Crie sua conta com um código de convite",
+    "inviteCode": "Código de convite",
+    "inviteCodePlaceholder": "Digite seu código de convite",
+    "confirmPassword": "Confirmar senha",
+    "submit": "Criar conta",
+    "submitting": "Criando conta...",
+    "success": "Conta criada! Entrando...",
+    "backToLogin": "Já tem uma conta? Entrar",
+    "errors": {
+      "codeRequired": "Digite seu código de convite",
+      "usernameRequired": "Digite um nome de usuário",
+      "passwordRequired": "Digite uma senha",
+      "confirmRequired": "Confirme sua senha",
+      "passwordMismatch": "As senhas não coincidem",
+      "invalidCode": "Código de convite inválido",
+      "expiredCode": "Este código de convite expirou",
+      "usernameTaken": "Este nome de usuário já está em uso",
+      "weakPassword": "A senha não atende aos requisitos",
+      "rateLimited": "Muitas tentativas, tente novamente mais tarde",
+      "networkError": "Falha na conexão, tente novamente",
+      "serverError": "Erro do servidor, tente novamente mais tarde",
+      "unknown": "Falha no cadastro, tente novamente"
+    }
   }
 }

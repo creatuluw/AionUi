@@ -202,5 +202,7 @@
   },
   "selectedCount": "{{count}} selecionado(s)",
   "selectedSkills": "Habilidades selecionadas",
-  "aiAssistant": "Assistente de IA"
+  "aiAssistant": "Assistente de IA",
+  "actions": "Ações",
+  "copied": "Copiado"
 }

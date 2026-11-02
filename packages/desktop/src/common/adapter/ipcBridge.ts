@@ -98,6 +98,16 @@ import type { AgentMetadata } from '@/renderer/utils/model/agentTypes';
 import type { Theme } from '@/common/theme/types';
 import type { AttachFolderRequest, ProjectDetailDto, ProjectEntryDto } from '@/common/types/project';
 import type { ChatFileRef, ContentEncoding } from '@/common/types/chatFile';
+import type {
+  AdminCreateInviteRequest,
+  AdminCreateInviteResponse,
+  AdminCreateUserRequest,
+  AuthRole,
+  IAdminInvite,
+  IAdminUser,
+  IAuthUser,
+  IPoolSettings,
+} from '../types/auth';
 import type { ProtocolDetectionRequest, ProtocolDetectionResponse } from '../utils/protocolDetector';
 import {
   buildCreateConversationBody,
@@ -261,7 +271,60 @@ export const auth = {
    *
    * Desktop needs this at all because `AuthContext` keeps `user` null there.
    */
-  currentUser: httpGet<{ id: string; username: string }>('/api/system/current-user'),
+  currentUser: httpGet<{ id: string; username: string; role?: AuthRole }>('/api/system/current-user'),
+  /**
+   * Invite redemption — POST /api/auth/register { code, username, password }.
+   * On success the backend sets the session cookies exactly like /login, so the
+   * caller only needs the standard session bootstrap (AuthContext.refresh()).
+   * Throws BackendHttpError on failure (invalid/used/expired code, name taken,
+   * weak password, rate limited).
+   */
+  register: httpPost<IAuthUser, { code: string; username: string; password: string }>('/api/auth/register'),
+};
+
+// ---------------------------------------------------------------------------
+// Admin — multi-user management (admin role only; backend enforces)
+// ---------------------------------------------------------------------------
+
+export const admin = {
+  users: {
+    /** GET /api/admin/users → all users. */
+    list: httpGet<IAdminUser[], void>('/api/admin/users'),
+    /** POST /api/admin/users → provision a user directly. */
+    create: httpPost<IAdminUser, AdminCreateUserRequest>('/api/admin/users'),
+    /** POST /api/admin/users/{id}/set-role { role }. */
+    setRole: httpPost<void, { id: string; role: AuthRole }>(
+      (p) => `/api/admin/users/${encodeURIComponent(p.id)}/set-role`,
+      (p) => ({ role: p.role })
+    ),
+    /** POST /api/admin/users/{id}/disable — block sign-in. */
+    disable: httpPost<void, { id: string }>((p) => `/api/admin/users/${encodeURIComponent(p.id)}/disable`),
+    /** POST /api/admin/users/{id}/enable. */
+    enable: httpPost<void, { id: string }>((p) => `/api/admin/users/${encodeURIComponent(p.id)}/enable`),
+    /** POST /api/admin/users/{id}/set-password { password }. */
+    setPassword: httpPost<void, { id: string; password: string }>(
+      (p) => `/api/admin/users/${encodeURIComponent(p.id)}/set-password`,
+      (p) => ({ password: p.password })
+    ),
+  },
+  invites: {
+    /** GET /api/admin/invites → all invites (never contains plaintext codes). */
+    list: httpGet<IAdminInvite[], void>('/api/admin/invites'),
+    /**
+     * POST /api/admin/invites → mint an invite. The response carries the
+     * PLAINTEXT code exactly once — display it with a copy affordance and
+     * never persist it.
+     */
+    create: httpPost<AdminCreateInviteResponse, AdminCreateInviteRequest>('/api/admin/invites'),
+    /** DELETE /api/admin/invites/{id} → revoke. */
+    revoke: httpDelete<void, { id: string }>((p) => `/api/admin/invites/${encodeURIComponent(p.id)}`),
+  },
+  poolSettings: {
+    /** GET /api/admin/pool-settings → shared pool configuration. */
+    get: httpGet<IPoolSettings, void>('/api/admin/pool-settings'),
+    /** PUT /api/admin/pool-settings → update shared pool configuration. */
+    update: httpPut<IPoolSettings, IPoolSettings>('/api/admin/pool-settings'),
+  },
 };
 
 // ---------------------------------------------------------------------------

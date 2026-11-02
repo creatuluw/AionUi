@@ -1416,5 +1416,75 @@
   "crossSessionMessageDesc": "エージェントが他の会話にメッセージを送れるようにします。オフにすると入力欄の @@ 会話メンションも無効になります。",
   "crossSessionMessageDisabledBanner": "会話間メッセージはオフです。入力欄の @@ 会話メンションは使用できません。",
   "crossSessionMessageResume": "再度オンにする",
-  "crossSessionMessageUpdateFailed": "会話間メッセージ設定の更新に失敗しました"
+  "crossSessionMessageUpdateFailed": "会話間メッセージ設定の更新に失敗しました",
+  "admin": {
+    "navLabel": "管理",
+    "title": "管理コンソール",
+    "description": "ユーザー・招待コード・共有プールを管理",
+    "tabs": {
+      "users": "ユーザー",
+      "invites": "招待コード",
+      "pool": "共有プール設定"
+    },
+    "users": {
+      "username": "ユーザー名",
+      "role": "ロール",
+      "status": "状態",
+      "actions": "操作",
+      "active": "有効",
+      "disabled": "無効",
+      "roleAdmin": "管理者",
+      "roleMember": "メンバー",
+      "provision": "ユーザーを追加",
+      "provisionTitle": "ユーザーを作成",
+      "provisionSuccess": "ユーザーを作成しました",
+      "provisionFailed": "ユーザーの作成に失敗しました",
+      "newPassword": "パスワード",
+      "setPassword": "パスワードを設定",
+      "setPasswordTitle": "{{name}} のパスワードを設定",
+      "passwordChanged": "パスワードを更新しました",
+      "disable": "無効化",
+      "enable": "有効化",
+      "disableConfirm": "{{name}} を無効化しますか？サインインできなくなります。",
+      "cannotDisableSelf": "自分のアカウントは無効化できません",
+      "cannotChangeSelf": "自分のロールは変更できません",
+      "roleChanged": "ロールを更新しました",
+      "actionFailed": "操作に失敗しました",
+      "loadFailed": "ユーザーの読み込みに失敗しました"
+    },
+    "invites": {
+      "hint": "招待コードは作成時に一度だけ表示されます。閉じる前にコピーしてください。",
+      "create": "招待コードを作成",
+      "createTitle": "招待コードを作成",
+      "createFailed": "招待コードの作成に失敗しました",
+      "expiryHours": "有効期限（時間）",
+      "expiryHint": "空欄で無期限",
+      "code": "コード",
+      "status": {
+        "active": "有効",
+        "used": "使用済み",
+        "expired": "期限切れ",
+        "revoked": "取り消し済み"
+      },
+      "codeTitle": "招待コード",
+      "codeWarning": "今すぐこのコードをコピーしてください。再度表示されません。",
+      "createdAt": "作成日時",
+      "expiresAt": "有効期限",
+      "usedAt": "使用日時",
+      "revoke": "取り消す",
+      "revokeConfirm": "この招待コードを取り消しますか？使用できなくなります。",
+      "revokeFailed": "招待コードの取り消しに失敗しました",
+      "loadFailed": "招待コードの読み込みに失敗しました",
+      "statusLabel": "状態"
+    },
+    "pool": {
+      "sharedEnabled": "共有キーサービス",
+      "sharedEnabledDesc": "API キーを持たないメンバーが共有プロバイダープールを利用できるようにします",
+      "dailyCap": "1日のリクエスト上限",
+      "dailyCapDesc": "共有プールの1日あたりの最大リクエスト数（0 = 無制限）",
+      "saved": "設定を保存しました",
+      "saveFailed": "設定の保存に失敗しました",
+      "loadFailed": "共有プール設定の読み込みに失敗しました"
+    }
+  }
 }
