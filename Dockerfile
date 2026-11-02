@@ -53,6 +53,5 @@ ENV PORT=25808 \
     GEMINI_CLI_TRUST_WORKSPACE=true
 # Agent CLIs land here at boot; also on PATH for `railway ssh`.
 ENV PATH=/data/agents/bin:$PATH
-VOLUME /data
 EXPOSE 25808
 ENTRYPOINT ["/entrypoint.sh"]
